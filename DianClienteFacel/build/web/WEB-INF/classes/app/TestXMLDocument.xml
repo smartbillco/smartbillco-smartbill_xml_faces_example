@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><fe:Invoice xmlns:fe="http://www.dian.gov.co/contratos/facturaelectronica/v1" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:sts="http://www.dian.gov.co/contratos/facturaelectronica/v1/Structures" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.dian.gov.co/contratos/facturaelectronica/v1 ../xsd/DIAN_UBL.xsd urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2 ../../ubl2/common/UnqualifiedDataTypeSchemaModule-2.0.xsd urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2 ../../ubl2/common/UBL-QualifiedDatatypes-2.0.xsd">
+    <cbc:UBLExtensions>
+        <ext:UBLExtension>
+            <ext:ExtensionContent>
+                <sts:DianExtensions>
+                    <sts:InvoiceControl>
+                        <sts:InvoiceAuthorization>9000000032852842</sts:InvoiceAuthorization>
+                        <sts:AuthorizationPeriod>
+                            <cbc:StartDate>2017-02-18</cbc:StartDate>
+                            <cbc:EndDate>2027-02-18</cbc:EndDate>
+                        </sts:AuthorizationPeriod>
+                        <sts:AuthorizedInvoices>
+                            <sts:Prefix>PRUE</sts:Prefix>
+                            <sts:From>980000000</sts:From>
+                            <sts:To>985000000</sts:To>
+                        </sts:AuthorizedInvoices>
+                    </sts:InvoiceControl>
+                    <sts:InvoiceSource>
+                        <cbc:IdentificationCode listAgencyID="6" listAgencyName="United Nations Economic Commission for Europe" listSchemeURI="urn:oasis:names:specification:ubl:codelist:gc:CountryIdentificationCode-2.0">CO</cbc:IdentificationCode>
+                    </sts:InvoiceSource>
+                    <sts:SoftwareProvider>
+                        <sts:ProviderID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Direccion de Impuestos y Aduanas Nacionales)">830041118</sts:ProviderID>
+                        <sts:SoftwareID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Direccion de Impuestos y Aduanas Nacionales)">86677d85-0e08-4693-b8a5-176255a7fa34</sts:SoftwareID>
+                    </sts:SoftwareProvider>
+                    <sts:SoftwareSecurityCode schemeAgencyID="195" schemeAgencyName="CO, DIAN (Direccion de Impuestos y Aduanas Nacionales)">ceef3a04021e985fcfd94697c4974a7af4df15519aec643f222b76a195fb8b1c5c7f05b0d4bd98861d3ccf2d9474de79</sts:SoftwareSecurityCode>
+                </sts:DianExtensions>
+            </ext:ExtensionContent>
+        </ext:UBLExtension>
+        <ext:UBLExtension>
+            <ext:ExtensionContent>
+                <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="12345678">
+                    <ds:SignedInfo>
+                        <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+                        <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+                        <ds:Reference URI="">
+                            <ds:Transforms>
+                                <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+                            </ds:Transforms>
+                            <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+                            <ds:DigestValue>2ZvqgLmIC4UQLMzbLKboqEtIViA=</ds:DigestValue>
+                        </ds:Reference>
+                    </ds:SignedInfo>
+                    <ds:SignatureValue>
+                        Uyxvgu/F63DbG/ZKvhGhmZsIRstyinwoyxKPkHFOGRUS/4ryXfcxdpXl4e3C6Wr0/5J9zxj3pd2u
+                        2J2vacu1ayiDsp5Dv3eq0X0ATP30IZBK0Bi5XV9frtCwOPA3lq7MMN1vErPboHKr/zvQP0HCQ9R0
+                        Uz/7QPYaRU01BXsid6JSinhsI62ynJMjKJl3IcYTF4QQzKIndfMb5S9dDKU6yrJfnhdNvrCqF3+M
+                        rKX6R6lemZA8UWsfvfOHGZEeoZBMA4N57VnJd7hO4T7zg1vBP0PQde3LNSPO9mTFSwPgphspQ7nx
+                        toY0nJxNO9Yn70JnJ57Vx0V737PRPY/qPShVFQ==
+                    </ds:SignatureValue>
+                    <ds:KeyInfo>
+                        <ds:X509Data>
+                            <ds:X509Certificate>
+                                MIIDhzCCAm+gAwIBAgIEXv35XjANBgkqhkiG9w0BAQsFADB0MQswCQYDVQQGEwJDTzEPMA0GA1UE
+                                CBMGQk9HT1RBMQ8wDQYDVQQHEwZCT0dPVEExHTAbBgNVBAoTFEtIQUVMIEVOVEVSUFJJU0UgU0FT
+                                MQswCQYDVQQLEwJJVDEXMBUGA1UEAxMORUxLSU4gQ0FTVElMTE8wHhcNMTgwNTE0MjIxMzI1WhcN
+                                MTgwODEyMjIxMzI1WjB0MQswCQYDVQQGEwJDTzEPMA0GA1UECBMGQk9HT1RBMQ8wDQYDVQQHEwZC
+                                T0dPVEExHTAbBgNVBAoTFEtIQUVMIEVOVEVSUFJJU0UgU0FTMQswCQYDVQQLEwJJVDEXMBUGA1UE
+                                AxMORUxLSU4gQ0FTVElMTE8wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCmc3DU1ZMQ
+                                YCGGxMgG7KT8hOfNN+I5c+vo8RB1gNaWxR3TY7lhTyTbE1uKT5Cp44KggytuGn70i3Hc6qasr2WD
+                                5g7uj92G+VjOWlYTrSE9rwrR1OD3MSejP/epGc9iXbbdz7OecSsAMIYcoVTxbYR3X6vUOc0cNcLt
+                                ZG6eUQytbzr5F5CM1D1J1K8t4EFyzb6+tDIrrx555o+pjr1HTSTNyU7AN7bD7bWdbda9X+Vbj0HJ
+                                BZZWdKP6ABKecyvJfPLug+3hHQnrQNbCDqF0QAyH9I7UZOwQEoBals4rJ2OddNIr6UG/7wLa8Vyu
+                                L80U06xOLi26nU0+e9yge98KQCWfAgMBAAGjITAfMB0GA1UdDgQWBBSoWpRM85TUJ+k9wJm5i/R6
+                                5cLCATANBgkqhkiG9w0BAQsFAAOCAQEAnMHd55ZSEasrHgEqwgM2If4z3sbDEIkY9zefUsJEi0fl
+                                kJu5a2I6FpByMI3nNinFkZwDkfswKANWljShn06Nka4T1FDt7Lw4gMUqB73GEFN2ufmRVN4POI7/
+                                Q6Yx1JlIiYqNZBKsxDFyIt8yGNb2gwgc6wqPHKzkREI07NxC5KCZU++DrZMjmwDGT8Pxgzjkwr+z
+                                /21/OkTWleKXbDhaMdqBCp7cs5OEbVigusdQvCGt0bwBNfeVI1m1ZN/Q0euK0icFLQYKp+mzYvRX
+                                TZhVsMskjuFbKOEt232Irt1Wl1id00S4M5aGTrXrYuNLXaxvX7FMXKmkLuSQh8rlJCfxiA==
+                            </ds:X509Certificate>
+                        </ds:X509Data>
+                        <ds:KeyValue>
+                            <ds:RSAKeyValue>
+                                <ds:Modulus>
+                                    pnNw1NWTEGAhhsTIBuyk/ITnzTfiOXPr6PEQdYDWlsUd02O5YU8k2xNbik+QqeOCoIMrbhp+9Itx
+                                    3OqmrK9lg+YO7o/dhvlYzlpWE60hPa8K0dTg9zEnoz/3qRnPYl223c+znnErADCGHKFU8W2Ed1+r
+                                    1DnNHDXC7WRunlEMrW86+ReQjNQ9SdSvLeBBcs2+vrQyK68eeeaPqY69R00kzclOwDe2w+21nW3W
+                                    vV/lW49ByQWWVnSj+gASnnMryXzy7oPt4R0J60DWwg6hdEAMh/SO1GTsEBKAWpbOKydjnXTSK+lB
+                                    v+8C2vFcri/NFNOsTi4tup1NPnvcoHvfCkAlnw==
+                                </ds:Modulus>
+                                <ds:Exponent>AQAB</ds:Exponent>
+                            </ds:RSAKeyValue>
+                        </ds:KeyValue>
+                    </ds:KeyInfo>
+                    <ds:Object/>
+                </ds:Signature>
+            </ext:ExtensionContent>
+        </ext:UBLExtension>
+    </cbc:UBLExtensions>
+    <cbc:UBLVersionID>UBL 2.0</cbc:UBLVersionID>
+    <cbc:ProfileID>DIAN 1.0</cbc:ProfileID>
+    <cbc:ID>PRUE980031308</cbc:ID>
+    <cbc:UUID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Direccion de Impuestos y Aduanas Nacionales)">983a2e8304d452184c0965ddc3549eda563e1ce9</cbc:UUID>
+    <cbc:IssueDate>2018-01-12</cbc:IssueDate>
+    <cbc:IssueTime>00:01:00</cbc:IssueTime>
+    <cbc:InvoiceTypeCode listAgencyID="195" listAgencyName="CO, DIAN (Direccion de Impuestos y Aduanas Nacionales)" listSchemeURI="http://www.dian.gov.co/contratos/facturaelectronica/v1/InvoiceType">1</cbc:InvoiceTypeCode>
+    <cbc:Note>.SALDO DEL CONTRATO NO. 080-2017, DE ACUERDO A LA CLAUSULA CUARTA. SERVICIO DE MANTENIMIENTO, ACTUALIZACION Y SOPORTE SOBRE EL SISTEMA DE INFORMACION INTEGRADO STONE ERP.</cbc:Note>
+    <cbc:DocumentCurrencyCode>COP</cbc:DocumentCurrencyCode>
+    <fe:AccountingSupplierParty>
+        <cbc:AdditionalAccountID>1</cbc:AdditionalAccountID>
+        <fe:Party>
+            <cac:PartyIdentification>
+                <cbc:ID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Direccion de Impuestos y Aduanas Nacionales)" schemeID="11">830041118</cbc:ID>
+            </cac:PartyIdentification>
+            <cac:PartyName>
+                <cbc:Name>Quality Software</cbc:Name>
+            </cac:PartyName>
+            <fe:PhysicalLocation>
+                <fe:Address>
+                    <cbc:Department>BOGOTA D.C.</cbc:Department>
+                    <cbc:CitySubdivisionName>ENGATIVA</cbc:CitySubdivisionName>
+                    <cbc:CityName>BOGOTA D.C.</cbc:CityName>
+                    <cac:AddressLine>
+                        <cbc:Line>Cra 15 98-42 of. 402</cbc:Line>
+                    </cac:AddressLine>
+                    <cac:Country>
+                        <cbc:IdentificationCode>CO</cbc:IdentificationCode>
+                    </cac:Country>
+                </fe:Address>
+            </fe:PhysicalLocation>
+            <fe:PartyTaxScheme>
+                <cbc:TaxLevelCode>2</cbc:TaxLevelCode>
+                <cac:TaxScheme/>
+            </fe:PartyTaxScheme>
+            <fe:PartyLegalEntity>
+                <cbc:RegistrationName>Quality Software</cbc:RegistrationName>
+            </fe:PartyLegalEntity>
+            <cac:Contact>
+                <cbc:ID>830041118-7</cbc:ID>
+                <cbc:Telephone>6180141</cbc:Telephone>
+                <cbc:ElectronicMail>juang@stone.com.co                                </cbc:ElectronicMail>
+            </cac:Contact>
+        </fe:Party>
+    </fe:AccountingSupplierParty>
+    <fe:AccountingCustomerParty>
+        <cbc:AdditionalAccountID>1</cbc:AdditionalAccountID>
+        <fe:Party>
+            <cac:PartyIdentification>
+                <cbc:ID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Direccion de Impuestos y Aduanas Nacionales)" schemeID="31">890985122</cbc:ID>
+            </cac:PartyIdentification>
+            <cac:PartyName>
+                <cbc:Name>COOPERATIVA DE HOSPITALES DE ANTIOQUIA  COHAN</cbc:Name>
+            </cac:PartyName>
+            <fe:PhysicalLocation>
+                <fe:Address>
+                    <cbc:Department>ANTIOQUIA</cbc:Department>
+                    <cbc:CityName>MEDELLIN</cbc:CityName>
+                    <cac:AddressLine>
+                        <cbc:Line>CARRERA 48 NUMERO 24 -104</cbc:Line>
+                    </cac:AddressLine>
+                    <cac:Country>
+                        <cac:IdentificationCode>CO</cac:IdentificationCode>
+                    </cac:Country>
+                </fe:Address>
+            </fe:PhysicalLocation>
+            <fe:PartyTaxScheme>
+                <cbc:TaxLevelCode>2</cbc:TaxLevelCode>
+                <cbc:TaxScheme/>
+            </fe:PartyTaxScheme>
+            <fe:PartyLegalEntity>
+                <cbc:RegistrationName>COOPERATIVA DE HOSPITALES DE ANTIOQUIA  COHAN</cbc:RegistrationName>
+            </fe:PartyLegalEntity>
+            <cac:Contact>
+                <cbc:ID>890985122-6</cbc:ID>
+                <cbc:Name>CARLOS RODRIGUEZ</cbc:Name>
+                <cbc:Telephone>074 - 354 88 80</cbc:Telephone>
+            </cac:Contact>
+        </fe:Party>
+    </fe:AccountingCustomerParty>
+    <fe:TaxTotal>
+        <cbc:TaxAmount currencyID="COP">1482759.0000</cbc:TaxAmount>
+        <cbc:TaxEvidenceIndicator>false</cbc:TaxEvidenceIndicator>
+        <fe:TaxSubtotal>
+            <cbc:TaxableAmount currencyID="COP">7803997.0000</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="COP">1482759.0000</cbc:TaxAmount>
+            <cbc:Percent>19</cbc:Percent>
+            <cac:TaxCategory>
+                <cac:TaxScheme>
+                    <cbc:ID>01</cbc:ID>
+                    <cbc:TaxTypeCode>IVA</cbc:TaxTypeCode>
+                </cac:TaxScheme>
+            </cac:TaxCategory>
+        </fe:TaxSubtotal>
+    </fe:TaxTotal>
+    <fe:LegalMonetaryTotal>
+        <cbc:LineExtensionAmount currencyID="COP">7803997.0000</cbc:LineExtensionAmount>
+        <cbc:TaxExclusiveAmount currencyID="COP">1482759.0000</cbc:TaxExclusiveAmount>
+        <cbc:PayableAmount currencyID="COP">9286756.0000</cbc:PayableAmount>
+    </fe:LegalMonetaryTotal>
+    <fe:InvoiceLine>
+        <cbc:ID>1</cbc:ID>
+        <cbc:InvoicedQuantity>1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="COP">7803997</cbc:LineExtensionAmount>
+        <cac:TaxTotal>
+            <cbc:TaxAmount currencyID="COP">1482759</cbc:TaxAmount>
+            <cbc:TaxEvidenceIndicator>false</cbc:TaxEvidenceIndicator>
+            <cac:TaxSubtotal>
+                <cbc:TaxableAmount currencyID="COP">7803997</cbc:TaxableAmount>
+                <cbc:TaxAmount currencyID="COP">1482759</cbc:TaxAmount>
+                <cbc:Percent>19</cbc:Percent>
+                <cac:TaxCategory>
+                    <cac:TaxScheme>
+                        <cbc:ID>01</cbc:ID>
+                        <cbc:TaxTypeCode>IMPUESTO AL VALOR AGREGADO</cbc:TaxTypeCode>
+                    </cac:TaxScheme>
+                </cac:TaxCategory>
+            </cac:TaxSubtotal>
+        </cac:TaxTotal>
+        <fe:Item>
+            <cbc:Description>SERVICIO DE MANTENIMIENTO</cbc:Description>
+        </fe:Item>
+        <fe:Price>
+            <cbc:PriceAmount currencyID="COP">7803997</cbc:PriceAmount>
+        </fe:Price>
+    </fe:InvoiceLine>
+</fe:Invoice>
