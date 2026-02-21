@@ -49,18 +49,18 @@ import org.apache.xml.security.utils.ElementProxy;
 public class RequestFactura {
 
     static String keystoreType = "JKS";
-    static String keystoreFile = "/Users/khael/Documents/certificados/diankeystore.jks";
-    static String keystorePass = "persona_juridica_pruebas";
-    static String privateKeyAlias = "certticadodian";
-    static String privateKeyPass = "persona_juridica_pruebas";
+    static String keystoreFile = "C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\certificados\\dianprodkeystore.jks";
+    static String keystorePass = "smartbill";
+    static String privateKeyAlias = "dian_prod_cert";
+    static String privateKeyPass = "smartbill";
     static String certificateAlias = "certticadodian";
     static String pathXMLFile;
 
     private static final String KEYSTORE_TYPE = "JKS";
-    private static final String KEYSTORE_FILE = "/Users/khael/Documents/certificados/keystore_certificadofaceldian.jks";
-    private static final String KEYSTORE_PASSWORD = "persona_juridica_pruebas";
-    private static final String PRIVATE_KEY_PASSWORD = "persona_juridica_pruebas";
-    private static final String PRIVATE_KEY_ALIAS = "certificadofaceldian";
+    private static final String KEYSTORE_FILE = "C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\certificados\\dianprodkeystore.jks";
+    private static final String KEYSTORE_PASSWORD = "smartbill";
+    private static final String PRIVATE_KEY_PASSWORD = "smartbill";
+    private static final String PRIVATE_KEY_ALIAS = "khael enterprise sas";
 
     public static void main(String arg[]) throws FileNotFoundException, IOException, UnrecoverableKeyException {
         org.apache.xml.security.Init.init();
@@ -579,7 +579,7 @@ public class RequestFactura {
 
             // Obtenemos la clave privada, pues la necesitaremos para encriptar.
             PrivateKey privateKey = (PrivateKey) ks.getKey(PRIVATE_KEY_ALIAS, PRIVATE_KEY_PASSWORD.toCharArray());
-            File signatureFile = new File("/Users/khael/Documents/certificados/signature.xml");
+            File signatureFile = new File("C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\certificados\\signature.xml");
             String baseURI = signatureFile.toURL().toString();	// BaseURI para las URL Relativas.
 
             // Instanciamos un objeto XMLSignature desde el Document. El algoritmo de firma será DSA
@@ -616,7 +616,7 @@ public class RequestFactura {
 
 //               doc.getDocumentElement().appendChild(xmlSignature.getElement());
             System.out.println("Testing Factory XML" + documentToString(doc));
-//            outputDocToFile(doc, signatureFile);
+            outputDocToFile(doc, signatureFile);
 
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(RequestFactura.class.getName()).log(Level.SEVERE, null, ex);

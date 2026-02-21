@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<CreditNote xmlns="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+<cbc:UBLVersionID>UBL 2.1</cbc:UBLVersionID>
+<cbc:CustomizationID>DIAN 2.1</cbc:CustomizationID>
+<cbc:ProfileExecutionID>2</cbc:ProfileExecutionID>
+<cbc:ID>NC001</cbc:ID>
+<cbc:UUID>CUDE-DEMO-12345</cbc:UUID>
+<cbc:IssueDate>2026-02-19</cbc:IssueDate>
+<cbc:IssueTime>10:30:00</cbc:IssueTime>
+<cbc:DocumentCurrencyCode>COP</cbc:DocumentCurrencyCode>
+<cac:DiscrepancyResponse>
+<cbc:ReferenceID>FAC001</cbc:ReferenceID>
+<cbc:ResponseCode>01</cbc:ResponseCode>
+<cbc:Description>Devolución parcial</cbc:Description>
+</cac:DiscrepancyResponse>
+<cac:BillingReference>
+<cac:InvoiceDocumentReference>
+<cbc:ID>FAC001</cbc:ID>
+<cbc:UUID>CUFE-DEMO-123</cbc:UUID>
+</cac:InvoiceDocumentReference>
+</cac:BillingReference>
+<cac:AccountingSupplierParty>
+<cac:Party>
+<cac:PartyTaxScheme>
+<cbc:CompanyID>900123456</cbc:CompanyID>
+<cbc:RegistrationName>EMPRESA DEMO SAS</cbc:RegistrationName>
+</cac:PartyTaxScheme>
+</cac:Party>
+</cac:AccountingSupplierParty>
+<cac:AccountingCustomerParty>
+<cac:Party>
+<cac:PartyTaxScheme>
+<cbc:CompanyID>10203040</cbc:CompanyID>
+<cbc:RegistrationName>CLIENTE DEMO</cbc:RegistrationName>
+</cac:PartyTaxScheme>
+</cac:Party>
+</cac:AccountingCustomerParty>
+<cac:TaxTotal>
+<cbc:TaxAmount>19000</cbc:TaxAmount>
+<cac:TaxSubtotal>
+<cbc:TaxableAmount>100000</cbc:TaxableAmount>
+<cbc:TaxAmount>19000</cbc:TaxAmount>
+<cac:TaxCategory>
+<cac:TaxScheme>
+<cbc:ID>01</cbc:ID>
+<cbc:Name>IVA</cbc:Name>
+</cac:TaxScheme>
+</cac:TaxCategory>
+</cac:TaxSubtotal>
+</cac:TaxTotal>
+<cac:LegalMonetaryTotal>
+<cbc:LineExtensionAmount>100000</cbc:LineExtensionAmount>
+<cbc:TaxExclusiveAmount>100000</cbc:TaxExclusiveAmount>
+<cbc:TaxInclusiveAmount>119000</cbc:TaxInclusiveAmount>
+<cbc:PayableAmount>119000</cbc:PayableAmount>
+</cac:LegalMonetaryTotal>
+<cac:CreditNoteLine>
+<cbc:ID>1</cbc:ID>
+<cbc:CreditedQuantity>1</cbc:CreditedQuantity>
+<cbc:LineExtensionAmount>100000</cbc:LineExtensionAmount>
+<cac:Item>
+<cbc:Description>Producto devuelto</cbc:Description>
+</cac:Item>
+<cac:Price>
+<cbc:PriceAmount>100000</cbc:PriceAmount>
+</cac:Price>
+</cac:CreditNoteLine>
+</CreditNote>
