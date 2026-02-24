@@ -206,9 +206,10 @@ public class RequestFacturaSimpleSigned {
             throw new IllegalStateException("No se encontró el segundo ext:ExtensionContent.");
         }
 
-        // REFERENCIA para la firma
+        // REFERENCIA para la firma: firmamos solo ext:ExtensionContent
         SignedDataObjects dataObjects = new SignedDataObjects(
-                new DataObjectReference("").withTransform(new EnvelopedSignatureTransform())
+                new DataObjectReference("") // referencia vacía → firmará el nodo pasado
+                        .withTransform(new EnvelopedSignatureTransform())
         );
 
         // Firma el XML dentro del ext:ExtensionContent
@@ -736,7 +737,9 @@ public class RequestFacturaSimpleSigned {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer t = tf.newTransformer();
         t.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-        t.setOutputProperty(OutputKeys.INDENT, "yes");
+        t.setOutputProperty(OutputKeys.INDENT, "no");
+        t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+        t.setOutputProperty(OutputKeys.INDENT, "no"); // ⚠ importante
         t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
         t.transform(new DOMSource(doc), new StreamResult(out));
     }

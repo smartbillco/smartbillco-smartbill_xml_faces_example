@@ -1,69 +1,34 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Invoice xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:sts="dian:gov:co:facturaelectronica:Structures-2-1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2 http://docs.oasis-open.org/ubl/os-UBL-2.1/xsd/maindoc/UBL-Invoice-2.1.xsd" xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">
-  <ext:UBLExtensions>
-    <ext:UBLExtension>
-      <ext:ExtensionContent>
-        <sts:DianExtensions>
-          <sts:InvoiceControl>
-            <sts:InvoiceAuthorization>18760000001</sts:InvoiceAuthorization>
-            <sts:AuthorizationPeriod>
-              <cbc:StartDate>2019-01-19</cbc:StartDate>
-              <cbc:EndDate>2030-01-19</cbc:EndDate>
-            </sts:AuthorizationPeriod>
-            <sts:AuthorizedInvoices>
-              <sts:Prefix>SETP</sts:Prefix>
-              <sts:From>990000000</sts:From>
-              <sts:To>995000000</sts:To>
-            </sts:AuthorizedInvoices>
-          </sts:InvoiceControl>
-          <sts:InvoiceSource>
-            <cbc:IdentificationCode listAgencyID="6" listAgencyName="United Nations Economic Commission for Europe" listSchemeURI="urn:oasis:names:specification:ubl:codelist:gc:CountryIdentificationCode-2.1">CO</cbc:IdentificationCode>
-          </sts:InvoiceSource>
-          <sts:SoftwareProvider>
-            <sts:ProviderID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)" schemeID="9" schemeName="31">900917753</sts:ProviderID>
-            <sts:SoftwareID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)">bd259d07-c73b-4153-b10d-42312d2fea68</sts:SoftwareID>
-          </sts:SoftwareProvider>
-          <sts:SoftwareSecurityCode schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)">faac661b1550420284636b13293fe6b73c244f42a6d4670c142406cc3b2d2dfc6c588c25052eb05f700d7c00053f9aed</sts:SoftwareSecurityCode>
-          <sts:AuthorizationProvider>
-            <sts:AuthorizationProviderID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)" schemeID="4" schemeName="31">800197268</sts:AuthorizationProviderID>
-          </sts:AuthorizationProvider>
-          <sts:QRCode>NroFactura=SETP990000001
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Invoice xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:sts="dian:gov:co:facturaelectronica:Structures-2-1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2 http://docs.oasis-open.org/ubl/os-UBL-2.1/xsd/maindoc/UBL-Invoice-2.1.xsd" xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"><ext:UBLExtensions><ext:UBLExtension><ext:ExtensionContent><sts:DianExtensions><sts:InvoiceControl><sts:InvoiceAuthorization>18760000001</sts:InvoiceAuthorization><sts:AuthorizationPeriod><cbc:StartDate>2019-01-19</cbc:StartDate><cbc:EndDate>2030-01-19</cbc:EndDate></sts:AuthorizationPeriod><sts:AuthorizedInvoices><sts:Prefix>SETP</sts:Prefix><sts:From>990000000</sts:From><sts:To>995000000</sts:To></sts:AuthorizedInvoices></sts:InvoiceControl><sts:InvoiceSource><cbc:IdentificationCode listAgencyID="6" listAgencyName="United Nations Economic Commission for Europe" listSchemeURI="urn:oasis:names:specification:ubl:codelist:gc:CountryIdentificationCode-2.1">CO</cbc:IdentificationCode></sts:InvoiceSource><sts:SoftwareProvider><sts:ProviderID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)" schemeID="9" schemeName="31">900917753</sts:ProviderID><sts:SoftwareID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)">bd259d07-c73b-4153-b10d-42312d2fea68</sts:SoftwareID></sts:SoftwareProvider><sts:SoftwareSecurityCode schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)">faac661b1550420284636b13293fe6b73c244f42a6d4670c142406cc3b2d2dfc6c588c25052eb05f700d7c00053f9aed</sts:SoftwareSecurityCode><sts:AuthorizationProvider><sts:AuthorizationProviderID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)" schemeID="4" schemeName="31">800197268</sts:AuthorizationProviderID></sts:AuthorizationProvider><sts:QRCode>NroFactura=SETP990000001
 NitFacturador=900917753
 NitAdquiriente=900108281
 FechaFactura=2026-02-23
 ValorTotalFactura=14994.07
-CUFE=7b1726bdabbb8d251f37d5f47c55378d1255c4b7fce4b87045e1e70195dcc25368618ea162b58df4794e7b9ed87fedf1
-URL=https://catalogo-vpfe-hab.dian.gov.co/Document/FindDocument?documentKey=7b1726bdabbb8d251f37d5f47c55378d1255c4b7fce4b87045e1e70195dcc25368618ea162b58df4794e7b9ed87fedf1</sts:QRCode>
-        </sts:DianExtensions>
-      </ext:ExtensionContent>
-    </ext:UBLExtension>
-    <ext:UBLExtension>
-      <ext:ExtensionContent>
-        <ds:Signature Id="xmldsig-563bd684-ad08-449b-b1ac-511b5e81fdeb">
+CUFE=78ef1db9a1f9ba3e89142caec7f248d95532ec637c0c98063126a46bc00c266d8714134d41c77fbb4143f3f726ce7f10
+URL=https://catalogo-vpfe-hab.dian.gov.co/Document/FindDocument?documentKey=78ef1db9a1f9ba3e89142caec7f248d95532ec637c0c98063126a46bc00c266d8714134d41c77fbb4143f3f726ce7f10</sts:QRCode></sts:DianExtensions></ext:ExtensionContent></ext:UBLExtension><ext:UBLExtension><ext:ExtensionContent><ds:Signature Id="xmldsig-a908929e-c6fb-4223-b2eb-44ca9c023ab5">
 <ds:SignedInfo>
 <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
 <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
-<ds:Reference Id="xmldsig-563bd684-ad08-449b-b1ac-511b5e81fdeb-ref0" URI="">
+<ds:Reference Id="xmldsig-a908929e-c6fb-4223-b2eb-44ca9c023ab5-ref0" URI="">
 <ds:Transforms>
 <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
 </ds:Transforms>
 <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
-<ds:DigestValue>N6dzR0OBkQTIczt6Q5L/U1O2cnouC0iPdBVyW2rfvdk=</ds:DigestValue>
+<ds:DigestValue>MC/sOTqR199gkvnptj8GNvfEQdoJu0aRLlTHNG74OeQ=</ds:DigestValue>
 </ds:Reference>
-<ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-563bd684-ad08-449b-b1ac-511b5e81fdeb-signedprops">
+<ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-a908929e-c6fb-4223-b2eb-44ca9c023ab5-signedprops">
 <ds:Transforms>
 <ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
 </ds:Transforms>
 <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
-<ds:DigestValue>kLcpIMz/3Sk+yTwHXGKqd2BVFaEqtqpNDZfaxFFNHag=</ds:DigestValue>
+<ds:DigestValue>q1L6Hd31JkGIQObnx/0naN+ZpKkUIw1eHufkevDZZWw=</ds:DigestValue>
 </ds:Reference>
 </ds:SignedInfo>
-<ds:SignatureValue Id="xmldsig-563bd684-ad08-449b-b1ac-511b5e81fdeb-sigvalue">
-bUN5JoYu8RAketgWRfF1kCMFO9lltz1v8UdvmUFhYoNx7QJHccFIGEU3GVHcVt7Sd3DfKI2ad22T
-ghoBAIwbJDEiGZNoG4JNoU/Yt5K4JQhF2LofpztjCCQdEWBiZuTKFrS6Wc4+r0ZhoOjIY3Vo9uhI
-8TE86NSu9EEQwh1IvxDFqwqSB8Wsd1+lZpSuimxIAmnEOEh4Sx9FsGFgOwxvaUGPW1audHIN0Ith
-zd/IGW9hFvxkhV+W8qkHL218yYbVbiCbgbAiZeVfN+XgeDTYUsBz+pUqv5P4sOmNLWDl66daGkXn
-K/u0jpSlc1ZRVDg6/VcF5OPcXxz75SwpskiQ/Q==
+<ds:SignatureValue Id="xmldsig-a908929e-c6fb-4223-b2eb-44ca9c023ab5-sigvalue">
+k9C3B40cAfHmQUOMDkNKE03LVz2enjbcxySX+9FbAyf+SC0KWKf/2HxIj0+8sjxDsDSt8vy3aZ6U
+KgavPf2qyA7Q2poaHZp5Q9AZDX+KyoayaNiGWkHCyKpaRaDJxiosqfl7H5P64zwsscwx6IDM0IbZ
+L9WUBVHxSzqPTLtCW4sIKHuswMGtTPZM8mmyBx1gz5B+/Gq+4wvrRZbcO8Y61dC3MPvd+UaB8Ksa
+AkuzwUGdalNTFPCWc+UybnQDbCDgF3XoirM8D0/MbbABc5XMSasPUzZWx5nN/BZjWTmL+8GZYLfk
+zmRVsSSp5EniULVhsmTAPol0ohDIocVsb5TrxQ==
 </ds:SignatureValue>
 <ds:KeyInfo>
 <ds:X509Data>
@@ -109,161 +74,5 @@ wtYdTuj/KOt4Bnu0uCgc+NVvamsBZZnYnWvf6ZehWnNo4/Z6
 </ds:X509IssuerSerial>
 </ds:X509Data>
 </ds:KeyInfo>
-<ds:Object>
-            <xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#" Target="#xmldsig-563bd684-ad08-449b-b1ac-511b5e81fdeb">
-              <xades:SignedProperties Id="xmldsig-563bd684-ad08-449b-b1ac-511b5e81fdeb-signedprops">
-                <xades:SignedSignatureProperties>
-                  <xades:SigningTime>2026-02-23T22:43:58.333-05:00</xades:SigningTime>
-                  <xades:SigningCertificate>
-                    <xades:Cert>
-                      <xades:CertDigest>
-                        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
-                        <ds:DigestValue>M3LlrI1KU01hRKa7K8GdRO+8Dsh+hVX0HmotYv/Cv6M=</ds:DigestValue>
-                      </xades:CertDigest>
-                      <xades:IssuerSerial>
-                        <ds:X509IssuerName>c=CO,l=BOGOTA D.C.,o=CAMERFIRMA COLOMBIA SAS,ou=Certificados Para Firma Electronica Camerfirma Colombia,serialNumber=901312112-4,cn=SUBCA CAMERFIRMA COLOMBIA SAS</ds:X509IssuerName>
-                        <ds:X509SerialNumber>1871487162676907602</ds:X509SerialNumber>
-                      </xades:IssuerSerial>
-                    </xades:Cert>
-                  </xades:SigningCertificate>
-                  <xades:SignaturePolicyIdentifier>
-                    <xades:SignaturePolicyId>
-                      <xades:SigPolicyId>
-                        <xades:Identifier>https://facturaelectronica.dian.gov.co/politicadefirma/v2/politicadefirmav2.pdf</xades:Identifier>
-                      </xades:SigPolicyId>
-                      <xades:SigPolicyHash>
-                        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
-                        <ds:DigestValue>Zp35M0CcDsUGoFYEhmKfy/Kf9hECylFC0F89+LbmXYo=</ds:DigestValue>
-                      </xades:SigPolicyHash>
-                    </xades:SignaturePolicyId>
-                  </xades:SignaturePolicyIdentifier>
-                </xades:SignedSignatureProperties>
-              </xades:SignedProperties>
-            </xades:QualifyingProperties>
-          </ds:Object>
-</ds:Signature>
-      </ext:ExtensionContent>
-    </ext:UBLExtension>
-  </ext:UBLExtensions>
-  <cbc:UBLVersionID>UBL 2.1</cbc:UBLVersionID>
-  <cbc:CustomizationID>05</cbc:CustomizationID>
-  <cbc:ProfileID>DIAN 2.1: Factura Electrónica de Venta</cbc:ProfileID>
-  <cbc:ProfileExecutionID>2</cbc:ProfileExecutionID>
-  <cbc:ID>SETP990000001</cbc:ID>
-  <cbc:UUID schemeID="2" schemeName="CUFE-SHA384">7b1726bdabbb8d251f37d5f47c55378d1255c4b7fce4b87045e1e70195dcc25368618ea162b58df4794e7b9ed87fedf1</cbc:UUID>
-  <cbc:IssueDate>2026-02-23</cbc:IssueDate>
-  <cbc:IssueTime>22:43:58-05:00</cbc:IssueTime>
-  <cbc:InvoiceTypeCode>01</cbc:InvoiceTypeCode>
-  <cbc:DocumentCurrencyCode listAgencyID="6" listAgencyName="United Nations Economic Commission for Europe" listID="ISO 4217 Alpha">COP</cbc:DocumentCurrencyCode>
-  <cbc:LineCountNumeric>1</cbc:LineCountNumeric>
-  <cac:AccountingSupplierParty>
-    <cbc:AdditionalAccountID>1</cbc:AdditionalAccountID>
-    <cac:Party>
-      <cac:PartyName>
-        <cbc:Name>KHAEL ENTERPRISE SAS</cbc:Name>
-      </cac:PartyName>
-      <cac:PartyTaxScheme>
-        <cbc:RegistrationName>KHAEL ENTERPRISE SAS</cbc:RegistrationName>
-        <cbc:CompanyID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)" schemeID="9" schemeName="31">900917753</cbc:CompanyID>
-        <cbc:TaxLevelCode listName="05">O-99</cbc:TaxLevelCode>
-        <cac:RegistrationAddress>
-          <cbc:ID>11001</cbc:ID>
-          <cbc:CityName>Bogotá, D.C.</cbc:CityName>
-          <cbc:CountrySubentity>Bogotá</cbc:CountrySubentity>
-          <cbc:CountrySubentityCode>11</cbc:CountrySubentityCode>
-          <cac:AddressLine>
-            <cbc:Line>Dirección OFE</cbc:Line>
-          </cac:AddressLine>
-          <cac:Country>
-            <cbc:IdentificationCode>CO</cbc:IdentificationCode>
-            <cbc:Name languageID="es">Colombia</cbc:Name>
-          </cac:Country>
-        </cac:RegistrationAddress>
-        <cac:TaxScheme>
-          <cbc:ID>01</cbc:ID>
-          <cbc:Name>IVA</cbc:Name>
-        </cac:TaxScheme>
-      </cac:PartyTaxScheme>
-      <cac:PartyLegalEntity>
-        <cbc:RegistrationName>KHAEL ENTERPRISE SAS</cbc:RegistrationName>
-        <cbc:CompanyID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)" schemeID="9" schemeName="31">900917753</cbc:CompanyID>
-      </cac:PartyLegalEntity>
-      <cac:Contact>
-        <cbc:ElectronicMail>khaeldeveloper@gmail.com</cbc:ElectronicMail>
-      </cac:Contact>
-    </cac:Party>
-  </cac:AccountingSupplierParty>
-  <cac:AccountingCustomerParty>
-    <cbc:AdditionalAccountID>1</cbc:AdditionalAccountID>
-    <cac:Party>
-      <cac:PartyName>
-        <cbc:Name>CLIENTE PRUEBA SAS</cbc:Name>
-      </cac:PartyName>
-      <cac:PartyTaxScheme>
-        <cbc:RegistrationName>CLIENTE PRUEBA SAS</cbc:RegistrationName>
-        <cbc:CompanyID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)" schemeID="3" schemeName="31">900108281</cbc:CompanyID>
-        <cbc:TaxLevelCode listName="04">O-99</cbc:TaxLevelCode>
-        <cac:TaxScheme>
-          <cbc:ID>01</cbc:ID>
-          <cbc:Name>IVA</cbc:Name>
-        </cac:TaxScheme>
-      </cac:PartyTaxScheme>
-      <cac:PartyLegalEntity>
-        <cbc:RegistrationName>CLIENTE PRUEBA SAS</cbc:RegistrationName>
-        <cbc:CompanyID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)" schemeID="3" schemeName="31">900108281</cbc:CompanyID>
-      </cac:PartyLegalEntity>
-    </cac:Party>
-  </cac:AccountingCustomerParty>
-  <cac:PaymentMeans>
-    <cbc:ID>1</cbc:ID>
-    <cbc:PaymentMeansCode>41</cbc:PaymentMeansCode>
-    <cbc:PaymentDueDate>2026-02-23</cbc:PaymentDueDate>
-    <cbc:PaymentID>1</cbc:PaymentID>
-  </cac:PaymentMeans>
-  <cac:TaxTotal>
-    <cbc:TaxAmount currencyID="COP">2394.01</cbc:TaxAmount>
-    <cac:TaxSubtotal>
-      <cbc:TaxableAmount currencyID="COP">12600.06</cbc:TaxableAmount>
-      <cbc:TaxAmount currencyID="COP">2394.01</cbc:TaxAmount>
-      <cac:TaxCategory>
-        <cbc:Percent>19.00</cbc:Percent>
-        <cac:TaxScheme>
-          <cbc:ID>01</cbc:ID>
-          <cbc:Name>IVA</cbc:Name>
-        </cac:TaxScheme>
-      </cac:TaxCategory>
-    </cac:TaxSubtotal>
-  </cac:TaxTotal>
-  <cac:LegalMonetaryTotal>
-    <cbc:LineExtensionAmount currencyID="COP">12600.06</cbc:LineExtensionAmount>
-    <cbc:TaxExclusiveAmount currencyID="COP">12600.06</cbc:TaxExclusiveAmount>
-    <cbc:TaxInclusiveAmount currencyID="COP">14994.07</cbc:TaxInclusiveAmount>
-    <cbc:PayableAmount currencyID="COP">14994.07</cbc:PayableAmount>
-  </cac:LegalMonetaryTotal>
-  <cac:InvoiceLine>
-    <cbc:ID>1</cbc:ID>
-    <cbc:InvoicedQuantity unitCode="NIU">1.000000</cbc:InvoicedQuantity>
-    <cbc:LineExtensionAmount currencyID="COP">12600.06</cbc:LineExtensionAmount>
-    <cac:TaxTotal>
-      <cbc:TaxAmount currencyID="COP">2394.01</cbc:TaxAmount>
-      <cac:TaxSubtotal>
-        <cbc:TaxableAmount currencyID="COP">12600.06</cbc:TaxableAmount>
-        <cbc:TaxAmount currencyID="COP">2394.01</cbc:TaxAmount>
-        <cac:TaxCategory>
-          <cbc:Percent>19.00</cbc:Percent>
-          <cac:TaxScheme>
-            <cbc:ID>01</cbc:ID>
-            <cbc:Name>IVA</cbc:Name>
-          </cac:TaxScheme>
-        </cac:TaxCategory>
-      </cac:TaxSubtotal>
-    </cac:TaxTotal>
-    <cac:Item>
-      <cbc:Description>Producto de prueba</cbc:Description>
-    </cac:Item>
-    <cac:Price>
-      <cbc:PriceAmount currencyID="COP">12600.06</cbc:PriceAmount>
-      <cbc:BaseQuantity unitCode="NIU">1.000000</cbc:BaseQuantity>
-    </cac:Price>
-  </cac:InvoiceLine>
-</Invoice>
+<ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#" Target="#xmldsig-a908929e-c6fb-4223-b2eb-44ca9c023ab5"><xades:SignedProperties Id="xmldsig-a908929e-c6fb-4223-b2eb-44ca9c023ab5-signedprops"><xades:SignedSignatureProperties><xades:SigningTime>2026-02-23T23:27:20.735-05:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>M3LlrI1KU01hRKa7K8GdRO+8Dsh+hVX0HmotYv/Cv6M=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>c=CO,l=BOGOTA D.C.,o=CAMERFIRMA COLOMBIA SAS,ou=Certificados Para Firma Electronica Camerfirma Colombia,serialNumber=901312112-4,cn=SUBCA CAMERFIRMA COLOMBIA SAS</ds:X509IssuerName><ds:X509SerialNumber>1871487162676907602</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://facturaelectronica.dian.gov.co/politicadefirma/v2/politicadefirmav2.pdf</xades:Identifier></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>Zp35M0CcDsUGoFYEhmKfy/Kf9hECylFC0F89+LbmXYo=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier></xades:SignedSignatureProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object>
+</ds:Signature></ext:ExtensionContent></ext:UBLExtension></ext:UBLExtensions><cbc:UBLVersionID>UBL 2.1</cbc:UBLVersionID><cbc:CustomizationID>05</cbc:CustomizationID><cbc:ProfileID>DIAN 2.1: Factura Electrónica de Venta</cbc:ProfileID><cbc:ProfileExecutionID>2</cbc:ProfileExecutionID><cbc:ID>SETP990000001</cbc:ID><cbc:UUID schemeID="2" schemeName="CUFE-SHA384">78ef1db9a1f9ba3e89142caec7f248d95532ec637c0c98063126a46bc00c266d8714134d41c77fbb4143f3f726ce7f10</cbc:UUID><cbc:IssueDate>2026-02-23</cbc:IssueDate><cbc:IssueTime>23:27:20-05:00</cbc:IssueTime><cbc:InvoiceTypeCode>01</cbc:InvoiceTypeCode><cbc:DocumentCurrencyCode listAgencyID="6" listAgencyName="United Nations Economic Commission for Europe" listID="ISO 4217 Alpha">COP</cbc:DocumentCurrencyCode><cbc:LineCountNumeric>1</cbc:LineCountNumeric><cac:AccountingSupplierParty><cbc:AdditionalAccountID>1</cbc:AdditionalAccountID><cac:Party><cac:PartyName><cbc:Name>KHAEL ENTERPRISE SAS</cbc:Name></cac:PartyName><cac:PartyTaxScheme><cbc:RegistrationName>KHAEL ENTERPRISE SAS</cbc:RegistrationName><cbc:CompanyID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)" schemeID="9" schemeName="31">900917753</cbc:CompanyID><cbc:TaxLevelCode listName="05">O-99</cbc:TaxLevelCode><cac:RegistrationAddress><cbc:ID>11001</cbc:ID><cbc:CityName>Bogotá, D.C.</cbc:CityName><cbc:CountrySubentity>Bogotá</cbc:CountrySubentity><cbc:CountrySubentityCode>11</cbc:CountrySubentityCode><cac:AddressLine><cbc:Line>Dirección OFE</cbc:Line></cac:AddressLine><cac:Country><cbc:IdentificationCode>CO</cbc:IdentificationCode><cbc:Name languageID="es">Colombia</cbc:Name></cac:Country></cac:RegistrationAddress><cac:TaxScheme><cbc:ID>01</cbc:ID><cbc:Name>IVA</cbc:Name></cac:TaxScheme></cac:PartyTaxScheme><cac:PartyLegalEntity><cbc:RegistrationName>KHAEL ENTERPRISE SAS</cbc:RegistrationName><cbc:CompanyID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)" schemeID="9" schemeName="31">900917753</cbc:CompanyID></cac:PartyLegalEntity><cac:Contact><cbc:ElectronicMail>khaeldeveloper@gmail.com</cbc:ElectronicMail></cac:Contact></cac:Party></cac:AccountingSupplierParty><cac:AccountingCustomerParty><cbc:AdditionalAccountID>1</cbc:AdditionalAccountID><cac:Party><cac:PartyName><cbc:Name>CLIENTE PRUEBA SAS</cbc:Name></cac:PartyName><cac:PartyTaxScheme><cbc:RegistrationName>CLIENTE PRUEBA SAS</cbc:RegistrationName><cbc:CompanyID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)" schemeID="3" schemeName="31">900108281</cbc:CompanyID><cbc:TaxLevelCode listName="04">O-99</cbc:TaxLevelCode><cac:TaxScheme><cbc:ID>01</cbc:ID><cbc:Name>IVA</cbc:Name></cac:TaxScheme></cac:PartyTaxScheme><cac:PartyLegalEntity><cbc:RegistrationName>CLIENTE PRUEBA SAS</cbc:RegistrationName><cbc:CompanyID schemeAgencyID="195" schemeAgencyName="CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)" schemeID="3" schemeName="31">900108281</cbc:CompanyID></cac:PartyLegalEntity></cac:Party></cac:AccountingCustomerParty><cac:PaymentMeans><cbc:ID>1</cbc:ID><cbc:PaymentMeansCode>41</cbc:PaymentMeansCode><cbc:PaymentDueDate>2026-02-23</cbc:PaymentDueDate><cbc:PaymentID>1</cbc:PaymentID></cac:PaymentMeans><cac:TaxTotal><cbc:TaxAmount currencyID="COP">2394.01</cbc:TaxAmount><cac:TaxSubtotal><cbc:TaxableAmount currencyID="COP">12600.06</cbc:TaxableAmount><cbc:TaxAmount currencyID="COP">2394.01</cbc:TaxAmount><cac:TaxCategory><cbc:Percent>19.00</cbc:Percent><cac:TaxScheme><cbc:ID>01</cbc:ID><cbc:Name>IVA</cbc:Name></cac:TaxScheme></cac:TaxCategory></cac:TaxSubtotal></cac:TaxTotal><cac:LegalMonetaryTotal><cbc:LineExtensionAmount currencyID="COP">12600.06</cbc:LineExtensionAmount><cbc:TaxExclusiveAmount currencyID="COP">12600.06</cbc:TaxExclusiveAmount><cbc:TaxInclusiveAmount currencyID="COP">14994.07</cbc:TaxInclusiveAmount><cbc:PayableAmount currencyID="COP">14994.07</cbc:PayableAmount></cac:LegalMonetaryTotal><cac:InvoiceLine><cbc:ID>1</cbc:ID><cbc:InvoicedQuantity unitCode="NIU">1.000000</cbc:InvoicedQuantity><cbc:LineExtensionAmount currencyID="COP">12600.06</cbc:LineExtensionAmount><cac:TaxTotal><cbc:TaxAmount currencyID="COP">2394.01</cbc:TaxAmount><cac:TaxSubtotal><cbc:TaxableAmount currencyID="COP">12600.06</cbc:TaxableAmount><cbc:TaxAmount currencyID="COP">2394.01</cbc:TaxAmount><cac:TaxCategory><cbc:Percent>19.00</cbc:Percent><cac:TaxScheme><cbc:ID>01</cbc:ID><cbc:Name>IVA</cbc:Name></cac:TaxScheme></cac:TaxCategory></cac:TaxSubtotal></cac:TaxTotal><cac:Item><cbc:Description>Producto de prueba</cbc:Description></cac:Item><cac:Price><cbc:PriceAmount currencyID="COP">12600.06</cbc:PriceAmount><cbc:BaseQuantity unitCode="NIU">1.000000</cbc:BaseQuantity></cac:Price></cac:InvoiceLine></Invoice>
