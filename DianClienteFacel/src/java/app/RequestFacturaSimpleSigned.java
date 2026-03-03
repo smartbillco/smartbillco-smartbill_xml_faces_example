@@ -1,3 +1,7 @@
+/**
+ *
+ * @author DANIEL SANTOS
+ */
 package app;
 
 import org.w3c.dom.Document;
@@ -13,6 +17,8 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.security.Key;
@@ -47,7 +53,7 @@ import xades4j.properties.IdentifierType;
 public class RequestFacturaSimpleSigned {
 
     // ====== PKCS12 (P12) ======
-    private static final String P12_PATH = "C:\\facturas\\KHAEL ENTERPRISE SAS\\KHAEL_ENTERPRISE_SAS.p12";
+    private static final String P12_PATH = "C:\\Users\\USER\\Pictures\\smartbillco-smartbill_xml_faces_example-main\\DianClienteFacel\\certificados\\KHAEL_ENTERPRISE_SAS.p12";
     private static final String P12_PASSWORD = "miLiPfvjjNYVbhXo";
     private static final String P12_ALIAS = null;
 
@@ -75,7 +81,7 @@ public class RequestFacturaSimpleSigned {
 
     //URL POLICY DIAN 
     private static final String POLICY_URL = "https://facturaelectronica.dian.gov.co/politicadefirma/v2/politicadefirmav2.pdf";
-    private static final String POLICY_HASH_BASE64 = "74CA0CBED706E5A233818A34B48B1241E5490439D49DF48E7C1A715EB9A8AF46"; // hash real SHA256  BASE64 = dMoMvtcG5aIzgYo0tIsSQeVJBDnUnfSOfBpxXrmor0Y=
+    private static final String POLICY_HASH_BASE64 = "74ca0cbed706e5a233818a34b48b1241e5490439d49df48e7c1a715eb9a8af46"; // hash real SHA256  BASE64 = dMoMvtcG5aIzgYo0tIsSQeVJBDnUnfSOfBpxXrmor0Y=
 
     // Software
     private static final String SOFTWARE_ID = "bd259d07-c73b-4153-b10d-42312d2fea68";
@@ -148,7 +154,7 @@ public class RequestFacturaSimpleSigned {
         }
 
         //REEMPLAZAMOS POR XADES-EPPES SEGUN LA POLITICA DE FIRMA DE LA DIAN
-        firmarXadesEPES(doc, km.privateKey, km.certificate, now);
+        //firmarXadesEPES(doc, km.privateKey, km.certificate, now);
 
         // 5) Guardar XML
         String nombreArchivo = generarNombreArchivoDIAN("fv", NIT_OFE_SIN_DV, "000", now.getYear(), 1);
@@ -169,6 +175,9 @@ public class RequestFacturaSimpleSigned {
         System.out.println("Base64 guardado en: " + base64File.getAbsolutePath());
     }
 
+    /**
+     * Firma el XML con XAdES-EPES usando la política DIAN
+     */
     public static void firmarXadesEPES(
             Document doc,
             PrivateKey privateKey,
@@ -178,18 +187,14 @@ public class RequestFacturaSimpleSigned {
         // Proveedor de clave y certificado
         KeyingDataProvider kdp = new DirectKeyingDataProvider(cert, privateKey);
 
+        // Hash exacto de la política
+        byte[] policyHash = calcularHashPolitica();
+
         // Política de firma DIAN
         SignaturePolicyInfoProvider policyProvider = () -> {
-            byte[] policyHashBytes = Base64.getDecoder().decode(
-                    "dMoMvtcG5aIzgYo0tIsSQeVJBDnUnfSOfBpxXrmor0Y="
-            );
-
-            ObjectIdentifier policyId = new ObjectIdentifier(
-                    POLICY_URL,
-                    IdentifierType.URI
-            );
-
-            return new SignaturePolicyIdentifierProperty(policyId, policyHashBytes);
+            ObjectIdentifier policyId = new ObjectIdentifier(POLICY_URL, IdentifierType.URI);
+            // PASAR EL HASH DIRECTAMENTE
+            return new SignaturePolicyIdentifierProperty(policyId, policyHash);
         };
 
         // Fecha de firma
@@ -197,7 +202,9 @@ public class RequestFacturaSimpleSigned {
 
         // Crea el firmador XAdES-EPES
         XadesSigner signer = new XadesEpesSigningProfile(kdp, policyProvider)
-                .withSignaturePropertiesProvider(collector -> collector.setSigningTime(new SigningTimeProperty(cal)))
+                .withSignaturePropertiesProvider(
+                        collector -> collector.setSigningTime(new SigningTimeProperty(cal))
+                )
                 .newSigner();
 
         // Busca el ext:ExtensionContent donde se insertará la firma
@@ -206,14 +213,57 @@ public class RequestFacturaSimpleSigned {
             throw new IllegalStateException("No se encontró el segundo ext:ExtensionContent.");
         }
 
-        // REFERENCIA para la firma: firmamos solo ext:ExtensionContent
+        // REFERENCIAS a firmar (XML completo)
         SignedDataObjects dataObjects = new SignedDataObjects(
-                new DataObjectReference("") // referencia vacía → firmará el nodo pasado
-                        .withTransform(new EnvelopedSignatureTransform())
+                new DataObjectReference("").withTransform(new EnvelopedSignatureTransform())
         );
 
         // Firma el XML dentro del ext:ExtensionContent
         signer.sign(dataObjects, extContent);
+    }
+
+    /*
+        public static byte[] calcularHashPolitica() throws Exception {
+        String policyUrl = "https://facturaelectronica.dian.gov.co/politicadefirma/v2/politicadefirmav2.pdf";
+
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+        try (InputStream is = new URL(policyUrl).openStream()) {
+            byte[] buffer = new byte[8192];
+            int bytesRead;
+
+            while ((bytesRead = is.read(buffer)) != -1) {
+                md.update(buffer, 0, bytesRead);
+            }
+        }
+
+        return md.digest(); // 👈 bytes SHA-256 reales
+    }
+     */
+    public static byte[] calcularHashPolitica() throws Exception {
+        String policyUrl = "https://facturaelectronica.dian.gov.co/politicadefirma/v2/politicadefirmav2.pdf";
+
+        URL url = new URL(policyUrl);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        con.setConnectTimeout(15000);
+        con.setReadTimeout(15000);
+
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+        try (InputStream is = con.getInputStream()) {
+            byte[] buffer = new byte[8192];
+            int bytesRead;
+            while ((bytesRead = is.read(buffer)) != -1) {
+                md.update(buffer, 0, bytesRead);
+            }
+        }
+
+        System.out.println("Content-Type: " + con.getContentType());
+        System.out.println("Content-Length: " + con.getContentLength());
+
+        return md.digest();
     }
 
     private static byte[] hexStringToByteArray(String s) {
