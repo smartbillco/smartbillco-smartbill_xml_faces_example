@@ -19,10 +19,13 @@ import org.w3c.dom.Node;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.List;
 
 //GUARDAR XML FIRMADO
@@ -31,6 +34,7 @@ import javax.xml.transform.OutputKeys;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import xades4j.algorithms.EnvelopedSignatureTransform;
 
 public class FirmadorXadesEpes {
 
@@ -39,7 +43,7 @@ public class FirmadorXadesEpes {
     public static void main(String[] args) throws Exception {
 
         // CERTIFICADO
-        final String certificado = "C:\\Users\\USER\\Pictures\\smartbillco-smartbill_xml_faces_example-main\\DianClienteFacel\\certificados\\KHAEL_ENTERPRISE_SAS.p12";
+        final String certificado = "C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\certificados\\KHAEL_ENTERPRISE_SAS.p12";
 
         //PASSWORD CERTIFICADO
         final String password_cert = "miLiPfvjjNYVbhXo";
@@ -48,21 +52,21 @@ public class FirmadorXadesEpes {
         final String policyUrl = "https://facturaelectronica.dian.gov.co/politicadefirma/v2/politicadefirmav2.pdf";
 
         //RUTA POLITICA
-        final String policyFile = "C:\\Users\\USER\\Pictures\\smartbillco-smartbill_xml_faces_example-main\\DianClienteFacel\\certificados\\";
+        final String policyFile = "C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\certificados\\";
 
         //HASH POLITICA
         final byte[] policyHash = Base64.getDecoder().decode("dMoMvtcG5aIzgYo0tIsSQeVJBDnUnfSOfBpxXrmor0Y=");
 
         //RUTA XML
-        final String xmlFile = "C:\\Users\\USER\\Pictures\\smartbillco-smartbill_xml_faces_example-main\\DianClienteFacel\\";
+        final String xmlFile = "C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\fv09009177530002600000019.xml";
 
-        // 1. Cargar XML
+        //Cargar XML
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
         Document doc = dbf.newDocumentBuilder()
-                .parse(new File(xmlFile + "fv09009177530002600000001.xml"));
+                .parse(new File(xmlFile));
 
-        // 2. Proveedor de llaves (PKCS12)
+        //Proveedor de llaves (PKCS12)
         KeyingDataProvider kdp = new FileSystemKeyStoreKeyingDataProvider(
                 "PKCS12",
                 certificado,
@@ -81,7 +85,7 @@ public class FirmadorXadesEpes {
                 false
         );
 
-        // 3. Política
+        //Política
         SignaturePolicyInfoProvider policyProvider = () -> {
             try {
                 InputStream policyStream
@@ -92,85 +96,55 @@ public class FirmadorXadesEpes {
                         policyStream
                 ).withLocationUrl(policyUrl);
 
-            } catch (Exception e) {
+            } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
         };
 
-        // 4. Perfil EPES
-        XadesEpesSigningProfile profile
-                = new XadesEpesSigningProfile(kdp, policyProvider);
+        SignaturePropertiesProvider rolesProvider = new SignaturePropertiesProvider() {
+            @Override
+            public void provideProperties(SignaturePropertiesCollector spc) {
+                // Crear SignerRole con el rol que quieras
+                SignerRoleProperty role = new SignerRoleProperty("third party");
 
+                // Asignarlo al collector
+                spc.setSignerRole(role);
+            }
+        };
+
+        //Perfil EPES
+        XadesSigningProfile profile = new XadesEpesSigningProfile(kdp, policyProvider)
+                .withAlgorithmsProvider(new CustomAlgorithmsProvider())
+                .withSignaturePropertiesProvider(rolesProvider);
+
+        //SIGNER
         XadesSigner signer = profile.newSigner();
 
-        // Buscar ExtensionContent
+        //Buscar segundo ExtensionContent (donde va la firma)
         Element extensionContent = findSignatureExtensionContent(doc);
         if (extensionContent == null) {
             throw new RuntimeException("No se encontró ExtensionContent");
         }
 
-        System.out.println("ExtensionContent encontrado");
+        //CREAR LA REFERENCIA CON EL TRANSFORM ENVELOPED
+        DataObjectDesc obj = new DataObjectReference("")
+                .withTransform(new EnvelopedSignatureTransform());
 
-        // ===== DOCUMENTO TEMPORAL =====
-        Document tempDoc = DocumentBuilderFactory.newInstance()
-                .newDocumentBuilder()
-                .newDocument();
-
-        Element tempRoot = tempDoc.createElement("Root");
-        tempDoc.appendChild(tempRoot);
-
-        // Copiamos el Invoice al tempDoc
-        Element invoiceCopy
-                = (Element) tempDoc.importNode(doc.getDocumentElement(), true);
-        tempRoot.appendChild(invoiceCopy);
-
-        // Firmamos la copia
-        DataObjectDesc obj = new EnvelopedXmlObject(invoiceCopy);
         SignedDataObjects dataObjs = new SignedDataObjects(obj);
 
-        signer.sign(
-                dataObjs,
-                tempRoot,
-                SignatureAppendingStrategies.AsLastChild
-        );
+        signer.sign(dataObjs, extensionContent);
 
-        // Buscamos la firma generada
-        Element signatureEl = null;
-        for (int i = 0; i < tempRoot.getChildNodes().getLength(); i++) {
-            Node n = tempRoot.getChildNodes().item(i);
-            if (n.getNodeType() == Node.ELEMENT_NODE
-                    && "Signature".equals(n.getLocalName())) {
-                signatureEl = (Element) n;
-                break;
-            }
-        }
-
-        if (signatureEl == null) {
-            throw new RuntimeException("No se generó la firma");
-        }
-
-        // Importamos la firma al documento real
-        Element importedSig = (Element) doc.importNode(signatureEl, true);
-
-        // Limpiamos ExtensionContent
-        while (extensionContent.hasChildNodes()) {
-            extensionContent.removeChild(extensionContent.getFirstChild());
-        }
-
-        // Insertamos la firma
-        extensionContent.appendChild(importedSig);
-
-        System.out.println("FIRMADO CORRECTAMENTE CON XADES-EPES");
+        System.out.println("XML firmado correctamente");
 
         // Guardar XML firmado en archivo
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.INDENT, "no");
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 
         DOMSource source = new DOMSource(doc);
 
-        File outputFile = new File(xmlFile + "fv09009177530002600000001.xml");
+        File outputFile = new File(xmlFile);
         StreamResult result = new StreamResult(outputFile);
 
         transformer.transform(source, result);

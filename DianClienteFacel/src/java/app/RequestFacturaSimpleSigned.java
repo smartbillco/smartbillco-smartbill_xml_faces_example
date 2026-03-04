@@ -7,7 +7,6 @@ package app;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import xades4j.providers.KeyingDataProvider;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -17,45 +16,16 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
-import java.security.Key;
-import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.Base64;
-import java.util.Enumeration;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-import xades4j.providers.*;
-import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
 import java.time.OffsetDateTime;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import org.apache.xml.security.Init;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.ElementProxy;
-import xades4j.algorithms.EnvelopedSignatureTransform;
-import xades4j.production.DataObjectReference;
-import xades4j.production.SignedDataObjects;
-import xades4j.production.XadesSigner;
-import xades4j.production.XadesEpesSigningProfile;
-import xades4j.properties.ObjectIdentifier;
-import xades4j.properties.SignaturePolicyIdentifierProperty;
-import xades4j.properties.SigningTimeProperty;
-import xades4j.providers.impl.DirectKeyingDataProvider;
-import xades4j.properties.IdentifierType;
 
 public class RequestFacturaSimpleSigned {
-
-    // ====== PKCS12 (P12) ======
-    private static final String P12_PATH = "C:\\Users\\USER\\Pictures\\smartbillco-smartbill_xml_faces_example-main\\DianClienteFacel\\certificados\\KHAEL_ENTERPRISE_SAS.p12";
-    private static final String P12_PASSWORD = "miLiPfvjjNYVbhXo";
-    private static final String P12_ALIAS = null;
 
     // ===== Namespaces UBL 2.1 + DIAN 2.1 =====
     private static final String NS_INVOICE = "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2";
@@ -78,10 +48,8 @@ public class RequestFacturaSimpleSigned {
     private static final String RES_END_DATE = "2030-01-19";
     private static final String RANGE_FROM = "990000000";
     private static final String RANGE_TO = "995000000";
-
-    //URL POLICY DIAN 
-    private static final String POLICY_URL = "https://facturaelectronica.dian.gov.co/politicadefirma/v2/politicadefirmav2.pdf";
-    private static final String POLICY_HASH_BASE64 = "74ca0cbed706e5a233818a34b48b1241e5490439d49df48e7c1a715eb9a8af46"; // hash real SHA256  BASE64 = dMoMvtcG5aIzgYo0tIsSQeVJBDnUnfSOfBpxXrmor0Y=
+    private static final String CONSEC_FILE = "consecutivo.txt";
+    private static final String CONSEC_FILE_ARCHIVO = "consecutivo_nombre.txt";
 
     // Software
     private static final String SOFTWARE_ID = "bd259d07-c73b-4153-b10d-42312d2fea68";
@@ -89,7 +57,7 @@ public class RequestFacturaSimpleSigned {
     private static final String CLAVE_TECNICA = "fc8eac422eba16e22ffd8c6f94b3f40a6e38162c";
 
     // Ambiente
-    private static final String TIPO_AMBIENTE = "2"; // 2 = habilitación
+    private static final String TIPO_AMBIENTE = "2"; // 2 = habilitación 1 = produccion
 
     public static void main(String[] args) throws Exception {
 
@@ -98,8 +66,12 @@ public class RequestFacturaSimpleSigned {
         ElementProxy.setDefaultPrefix(Constants.SignatureSpecNS, "ds");
         Constants.setSignatureSpecNSprefix("ds");
         // ========= Datos factura =========
-        long consecutive = 990000001L;
+        //long consecutive = 990000001L;
+        long consecutive = getNextConsecutive();
         String numFac = PREFIX + consecutive;
+
+        //CONSECUTIVO PARA NOMBRE DE ARCHIVO
+        long consecutiveFactura = getNextConsecutiveNombre();
 
         // IMPORTANTE: DIAN valida fecha/tiempo generación vs firma.
         // Toma "now" una sola vez y úsalo para IssueDate/IssueTime y para XAdES SigningTime si lo implementas.
@@ -109,8 +81,8 @@ public class RequestFacturaSimpleSigned {
         String horFac = now.format(DateTimeFormatter.ofPattern("HH:mm:ssXXX"));
 
         // Cliente (ejemplo)
-        String numAdqSinDv = "900108281";
-        String adqName = "CLIENTE PRUEBA SAS";
+        String numAdqSinDv = "1043966525";
+        String adqName = "Daniel David Santos Perez";
 
         // Valores
         String valFac = money2("12600.06");
@@ -144,159 +116,14 @@ public class RequestFacturaSimpleSigned {
                 softwareSecurityCode, cufe
         );
 
-        // 3) Cargar P12
-        KeyMaterial km = loadPkcs12(P12_PATH, P12_PASSWORD, P12_ALIAS);
-
-        // 4) Firmar (XMLDSig enveloped) e insertar en 2do ext:ExtensionContent
-        Element sigTargetExtensionContent = findSignatureExtensionContent(doc);
-        if (sigTargetExtensionContent == null) {
-            throw new IllegalStateException("No se encontró el segundo ext:ExtensionContent para insertar la firma.");
-        }
-
-        //REEMPLAZAMOS POR XADES-EPPES SEGUN LA POLITICA DE FIRMA DE LA DIAN
-        //firmarXadesEPES(doc, km.privateKey, km.certificate, now);
-
         // 5) Guardar XML
-        String nombreArchivo = generarNombreArchivoDIAN("fv", NIT_OFE_SIN_DV, "000", now.getYear(), 1);
+        String nombreArchivo = generarNombreArchivoDIAN("fv", NIT_OFE_SIN_DV, "000", now.getYear(), consecutiveFactura);
         File out = new File(nombreArchivo);
         writeXml(doc, out);
 
         System.out.println("OK -> " + out.getAbsolutePath());
         System.out.println("CUFE: " + cufe);
         System.out.println("SoftwareSecurityCode: " + softwareSecurityCode);
-        System.out.println("Cert Subject: " + km.certificate.getSubjectX500Principal());
-
-        // ZIP + Base64
-        File zipFile = zipXml(out);
-        String zipBase64 = fileToBase64(zipFile);
-        File base64File = saveBase64ToFile(zipFile, zipBase64);
-
-        System.out.println("ZIP generado: " + zipFile.getAbsolutePath());
-        System.out.println("Base64 guardado en: " + base64File.getAbsolutePath());
-    }
-
-    /**
-     * Firma el XML con XAdES-EPES usando la política DIAN
-     */
-    public static void firmarXadesEPES(
-            Document doc,
-            PrivateKey privateKey,
-            X509Certificate cert,
-            OffsetDateTime issueDateTime) throws Exception {
-
-        // Proveedor de clave y certificado
-        KeyingDataProvider kdp = new DirectKeyingDataProvider(cert, privateKey);
-
-        // Hash exacto de la política
-        byte[] policyHash = calcularHashPolitica();
-
-        // Política de firma DIAN
-        SignaturePolicyInfoProvider policyProvider = () -> {
-            ObjectIdentifier policyId = new ObjectIdentifier(POLICY_URL, IdentifierType.URI);
-            // PASAR EL HASH DIRECTAMENTE
-            return new SignaturePolicyIdentifierProperty(policyId, policyHash);
-        };
-
-        // Fecha de firma
-        Calendar cal = GregorianCalendar.from(issueDateTime.toZonedDateTime());
-
-        // Crea el firmador XAdES-EPES
-        XadesSigner signer = new XadesEpesSigningProfile(kdp, policyProvider)
-                .withSignaturePropertiesProvider(
-                        collector -> collector.setSigningTime(new SigningTimeProperty(cal))
-                )
-                .newSigner();
-
-        // Busca el ext:ExtensionContent donde se insertará la firma
-        Element extContent = findSignatureExtensionContent(doc);
-        if (extContent == null) {
-            throw new IllegalStateException("No se encontró el segundo ext:ExtensionContent.");
-        }
-
-        // REFERENCIAS a firmar (XML completo)
-        SignedDataObjects dataObjects = new SignedDataObjects(
-                new DataObjectReference("").withTransform(new EnvelopedSignatureTransform())
-        );
-
-        // Firma el XML dentro del ext:ExtensionContent
-        signer.sign(dataObjects, extContent);
-    }
-
-    /*
-        public static byte[] calcularHashPolitica() throws Exception {
-        String policyUrl = "https://facturaelectronica.dian.gov.co/politicadefirma/v2/politicadefirmav2.pdf";
-
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-
-        try (InputStream is = new URL(policyUrl).openStream()) {
-            byte[] buffer = new byte[8192];
-            int bytesRead;
-
-            while ((bytesRead = is.read(buffer)) != -1) {
-                md.update(buffer, 0, bytesRead);
-            }
-        }
-
-        return md.digest(); // 👈 bytes SHA-256 reales
-    }
-     */
-    public static byte[] calcularHashPolitica() throws Exception {
-        String policyUrl = "https://facturaelectronica.dian.gov.co/politicadefirma/v2/politicadefirmav2.pdf";
-
-        URL url = new URL(policyUrl);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        con.setConnectTimeout(15000);
-        con.setReadTimeout(15000);
-
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-
-        try (InputStream is = con.getInputStream()) {
-            byte[] buffer = new byte[8192];
-            int bytesRead;
-            while ((bytesRead = is.read(buffer)) != -1) {
-                md.update(buffer, 0, bytesRead);
-            }
-        }
-
-        System.out.println("Content-Type: " + con.getContentType());
-        System.out.println("Content-Length: " + con.getContentLength());
-
-        return md.digest();
-    }
-
-    private static byte[] hexStringToByteArray(String s) {
-        int len = s.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2]
-                    = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i + 1), 16));
-        }
-        return data;
-    }
-
-    private static Element findSignatureExtensionContent(Document doc) {
-        Element invoice = doc.getDocumentElement();
-        Element ublExts = (Element) invoice.getElementsByTagNameNS(NS_EXT, "UBLExtensions").item(0);
-        if (ublExts == null) {
-            return null;
-        }
-
-        int count = 0;
-        for (int i = 0; i < ublExts.getChildNodes().getLength(); i++) {
-            org.w3c.dom.Node n = ublExts.getChildNodes().item(i);
-            if (n instanceof Element && NS_EXT.equals(((Element) n).getNamespaceURI())
-                    && "UBLExtension".equals(((Element) n).getLocalName())) {
-                count++;
-                if (count == 2) {
-                    Element secondExt = (Element) n;
-                    return (Element) secondExt.getElementsByTagNameNS(NS_EXT, "ExtensionContent").item(0);
-                }
-            }
-        }
-        return null;
     }
 
     // ==================== Construcción UBL (con grupos que DIAN exige) ====================
@@ -312,16 +139,23 @@ public class RequestFacturaSimpleSigned {
         dbf.setNamespaceAware(true);
         Document doc = dbf.newDocumentBuilder().newDocument();
 
+        //Element invoice = doc.createElementNS(NS_INVOICE, "Invoice");
+        //doc.appendChild(invoice);
         Element invoice = doc.createElementNS(NS_INVOICE, "Invoice");
         doc.appendChild(invoice);
 
-        invoice.setAttribute("xmlns:cac", NS_CAC);
-        invoice.setAttribute("xmlns:cbc", NS_CBC);
-        invoice.setAttribute("xmlns:ext", NS_EXT);
-        invoice.setAttribute("xmlns:sts", NS_STS);
-        invoice.setAttribute("xmlns:ds", NS_DS);
-        invoice.setAttribute("xmlns:xsi", NS_XSI);
+        // ===== Declarar todos los namespaces requeridos por DIAN =====
+        invoice.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns", NS_INVOICE);
+        invoice.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:cac", NS_CAC);
+        invoice.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:cbc", NS_CBC);
+        invoice.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:ext", NS_EXT);
+        invoice.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:sts", NS_STS);
+        invoice.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:ds", NS_DS);
+        invoice.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xsi", NS_XSI);
+        invoice.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xades", "http://uri.etsi.org/01903/v1.3.2#");
+        invoice.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xades141", "http://uri.etsi.org/01903/v1.4.1#");
 
+        // schemaLocation
         invoice.setAttributeNS(NS_XSI, "xsi:schemaLocation",
                 NS_INVOICE + " http://docs.oasis-open.org/ubl/os-UBL-2.1/xsd/maindoc/UBL-Invoice-2.1.xsd");
 
@@ -510,6 +344,16 @@ public class RequestFacturaSimpleSigned {
         line.appendChild(item);
         item.appendChild(textEl(doc, NS_CBC, "cbc:Description", "Producto de prueba"));
 
+        // ===== FAZ09 - Identificación estándar del producto =====
+        Element standardItemId = el(doc, NS_CAC, "cac:StandardItemIdentification");
+        item.appendChild(standardItemId);
+
+        Element itemId = textEl(doc, NS_CBC, "cbc:ID", "123456789"); // Código del producto
+        itemId.setAttribute("schemeID", "999");
+        itemId.setAttribute("schemeName", "Estándar interno");
+        itemId.setAttribute("schemeAgencyID", "195");
+        standardItemId.appendChild(itemId);
+
         Element price = el(doc, NS_CAC, "cac:Price");
         line.appendChild(price);
         price.appendChild(amountEl(doc, "cbc:PriceAmount", lineExtension.toPlainString(), "COP"));
@@ -532,6 +376,30 @@ public class RequestFacturaSimpleSigned {
         Element partyName = el(doc, NS_CAC, "cac:PartyName");
         party.appendChild(partyName);
         partyName.appendChild(textEl(doc, NS_CBC, "cbc:Name", OFE_NAME));
+
+        // ===== PhysicalLocation (OBLIGATORIO PARA FAJ17) =====
+        Element physicalLocation = el(doc, NS_CAC, "cac:PhysicalLocation");
+        party.appendChild(physicalLocation);
+
+        Element address = el(doc, NS_CAC, "cac:Address");
+        physicalLocation.appendChild(address);
+
+        address.appendChild(textEl(doc, NS_CBC, "cbc:ID", "11001"));
+        address.appendChild(textEl(doc, NS_CBC, "cbc:CityName", "Bogotá, D.C."));
+        address.appendChild(textEl(doc, NS_CBC, "cbc:CountrySubentity", "Bogotá"));
+        address.appendChild(textEl(doc, NS_CBC, "cbc:CountrySubentityCode", "11"));
+
+        Element addressLine = el(doc, NS_CAC, "cac:AddressLine");
+        address.appendChild(addressLine);
+        addressLine.appendChild(textEl(doc, NS_CBC, "cbc:Line", "Dirección OFE"));
+
+        Element country = el(doc, NS_CAC, "cac:Country");
+        address.appendChild(country);
+
+        country.appendChild(textEl(doc, NS_CBC, "cbc:IdentificationCode", "CO"));
+        Element countryNamep = textEl(doc, NS_CBC, "cbc:Name", "Colombia");
+        countryNamep.setAttribute("languageID", "es");
+        country.appendChild(countryNamep);
 
         // PartyTaxScheme (ZB01 espera TaxScheme y normalmente TaxLevelCode)
         Element partyTaxScheme = el(doc, NS_CAC, "cac:PartyTaxScheme");
@@ -562,12 +430,12 @@ public class RequestFacturaSimpleSigned {
         regAddr.appendChild(addrLine);
         addrLine.appendChild(textEl(doc, NS_CBC, "cbc:Line", "Dirección OFE"));
 
-        Element country = el(doc, NS_CAC, "cac:Country");
-        regAddr.appendChild(country);
-        country.appendChild(textEl(doc, NS_CBC, "cbc:IdentificationCode", "CO"));
+        Element country2 = el(doc, NS_CAC, "cac:Country");
+        regAddr.appendChild(country2);
+        country2.appendChild(textEl(doc, NS_CBC, "cbc:IdentificationCode", "CO"));
         Element countryName = textEl(doc, NS_CBC, "cbc:Name", "Colombia");
         countryName.setAttribute("languageID", "es");
-        country.appendChild(countryName);
+        country2.appendChild(countryName);
 
         // TaxScheme
         Element taxScheme = el(doc, NS_CAC, "cac:TaxScheme");
@@ -586,6 +454,16 @@ public class RequestFacturaSimpleSigned {
         leCompanyId.setAttribute("schemeID", dv);
         leCompanyId.setAttribute("schemeName", "31");
         ple.appendChild(leCompanyId);
+
+        // CorporateRegistrationScheme (OBLIGATORIO PARA FAJ50)
+        Element corpRegScheme = el(doc, NS_CAC, "cac:CorporateRegistrationScheme");
+        ple.appendChild(corpRegScheme);
+
+        // Prefijo habilitado del punto de facturación
+        corpRegScheme.appendChild(textEl(doc, NS_CBC, "cbc:ID", PREFIX));
+
+        // Nombre opcional (puede ir igual al prefijo o nombre sucursal)
+        corpRegScheme.appendChild(textEl(doc, NS_CBC, "cbc:Name", PREFIX));
 
         // Contacto
         Element contact = el(doc, NS_CAC, "cac:Contact");
@@ -619,7 +497,7 @@ public class RequestFacturaSimpleSigned {
         partyTaxScheme.appendChild(companyId);
 
         Element taxLevel = textEl(doc, NS_CBC, "cbc:TaxLevelCode", "O-99");
-        taxLevel.setAttribute("listName", "04");
+        taxLevel.setAttribute("listName", "05");
         partyTaxScheme.appendChild(taxLevel);
 
         Element taxScheme = el(doc, NS_CAC, "cac:TaxScheme");
@@ -639,54 +517,6 @@ public class RequestFacturaSimpleSigned {
         ple.appendChild(leCompanyId);
 
         return customer;
-    }
-
-    // ==================== PKCS12 loader ====================
-    private static KeyMaterial loadPkcs12(String path, String password, String desiredAlias) throws Exception {
-        KeyStore ks = KeyStore.getInstance("PKCS12");
-        try (FileInputStream fis = new FileInputStream(path)) {
-            ks.load(fis, password.toCharArray());
-        }
-
-        String alias = desiredAlias;
-        if (alias == null || alias.trim().isEmpty()) {
-            alias = firstPrivateKeyAlias(ks);
-        }
-        if (alias == null) {
-            throw new IllegalStateException("No se encontró alias con PrivateKey dentro del .p12");
-        }
-
-        Key key = ks.getKey(alias, password.toCharArray());
-        if (!(key instanceof PrivateKey)) {
-            throw new IllegalStateException("El alias seleccionado no contiene PrivateKey: " + alias);
-        }
-
-        X509Certificate cert = (X509Certificate) ks.getCertificate(alias);
-        return new KeyMaterial((PrivateKey) key, cert, alias);
-    }
-
-    private static String firstPrivateKeyAlias(KeyStore ks) throws Exception {
-        Enumeration<String> aliases = ks.aliases();
-        while (aliases.hasMoreElements()) {
-            String a = aliases.nextElement();
-            if (ks.isKeyEntry(a)) {
-                return a;
-            }
-        }
-        return null;
-    }
-
-    private static class KeyMaterial {
-
-        final PrivateKey privateKey;
-        final X509Certificate certificate;
-        final String alias;
-
-        KeyMaterial(PrivateKey pk, X509Certificate cert, String alias) {
-            this.privateKey = pk;
-            this.certificate = cert;
-            this.alias = alias;
-        }
     }
 
     // ==================== CUFE helpers ====================
@@ -794,53 +624,6 @@ public class RequestFacturaSimpleSigned {
         t.transform(new DOMSource(doc), new StreamResult(out));
     }
 
-    // ==================== ZIP/Base64 helpers ====================
-    public static File zipXml(File xmlFile) throws Exception {
-        Path xmlPath = xmlFile.toPath().toAbsolutePath();
-        Path dir = xmlPath.getParent();
-        if (dir == null) {
-            dir = Paths.get(System.getProperty("user.dir"));
-        }
-
-        String zipName = xmlFile.getName().replaceAll("(?i)\\.xml$", "") + ".zip";
-        Path zipPath = dir.resolve(zipName);
-
-        try (ZipOutputStream zos = new ZipOutputStream(Files.newOutputStream(zipPath));
-                InputStream fis = Files.newInputStream(xmlPath)) {
-
-            zos.putNextEntry(new ZipEntry(xmlFile.getName()));
-
-            byte[] buffer = new byte[4096];
-            int len;
-            while ((len = fis.read(buffer)) > 0) {
-                zos.write(buffer, 0, len);
-            }
-            zos.closeEntry();
-        }
-        return zipPath.toFile();
-    }
-
-    public static String fileToBase64(File file) throws Exception {
-        byte[] fileBytes = Files.readAllBytes(file.toPath());
-        return Base64.getEncoder().encodeToString(fileBytes);
-    }
-
-    public static File saveBase64ToFile(File zipFile, String base64) throws Exception {
-        Path zipPath = zipFile.toPath().toAbsolutePath();
-        Path dir = zipPath.getParent();
-        if (dir == null) {
-            dir = Paths.get(System.getProperty("user.dir"));
-        }
-
-        String base64FileName = zipFile.getName().replace(".zip", "_BASE64.txt");
-        Path base64Path = dir.resolve(base64FileName);
-
-        Files.write(base64Path, base64.getBytes(StandardCharsets.UTF_8),
-                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-
-        return base64Path.toFile();
-    }
-
     public static String generarNombreArchivoDIAN(
             String tipoDocumento, // "fv"
             String nitSinDv,
@@ -850,7 +633,60 @@ public class RequestFacturaSimpleSigned {
 
         String nit10 = String.format("%010d", Long.parseLong(nitSinDv));
         String aa = String.valueOf(year).substring(2);
-        String hex = String.format("%08X", consecutivoDecimal);
+        String hex = String.format("%08d", consecutivoDecimal); //"%08X" HEXADECIMAL, DIAN ESPERA DECIMAL "%08d"
         return tipoDocumento + nit10 + tipoSoftware + aa + hex + ".xml";
+    }
+
+    private static long getNextConsecutive() throws Exception {
+
+        File file = new File(CONSEC_FILE);
+
+        long current;
+
+        if (!file.exists()) {
+            // Si no existe, empieza desde el rango inicial autorizado
+            current = Long.parseLong(RANGE_FROM);
+        } else {
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                current = Long.parseLong(br.readLine().trim());
+            }
+        }
+
+        long next = current + 1;
+
+        // VALIDACIÓN DE RANGO AUTORIZADO DIAN
+        if (next > Long.parseLong(RANGE_TO)) {
+            throw new RuntimeException("Se superó el rango autorizado por la DIAN");
+        }
+
+        // Guardamos el siguiente consecutivo
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            bw.write(String.valueOf(next));
+        }
+
+        return next;
+    }
+
+    private static long getNextConsecutiveNombre() throws Exception {
+
+        File file = new File(CONSEC_FILE_ARCHIVO);
+
+        long current;
+
+        if (!file.exists()) {
+            current = 1;
+        } else {
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                current = Long.parseLong(br.readLine().trim());
+            }
+        }
+
+        long next = current + 1;
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            bw.write(String.valueOf(next));
+        }
+
+        return current; // ← importante: retorna el actual
     }
 }

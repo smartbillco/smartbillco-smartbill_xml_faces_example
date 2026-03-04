@@ -16,6 +16,7 @@ public class XmlZipBase64Util {
      * @param xmlFirmado Ruta del XML firmado
      * @param nombreZip Nombre del zip (sin .zip)
      * @param salidaTxt Ruta del archivo txt salida
+     * @throws java.lang.Exception
      */
     public static void generarZipBase64Txt(String xmlFirmado, String nombreZip, String salidaTxt) throws Exception {
 
@@ -24,39 +25,44 @@ public class XmlZipBase64Util {
             throw new RuntimeException("No existe el XML: " + xmlFirmado);
         }
 
-        // ============ 1. CREAR ZIP EN MEMORIA ============
+        // ============ 1. CREAR ZIP EN MEMORIA ============ 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ZipOutputStream zos = new ZipOutputStream(baos);
+        try (ZipOutputStream zos = new ZipOutputStream(baos)) {
 
-        ZipEntry entry = new ZipEntry(xmlFile.getName());
-        zos.putNextEntry(entry);
+            ZipEntry entry = new ZipEntry(xmlFile.getName());
+            zos.putNextEntry(entry);
 
-        Files.copy(xmlFile.toPath(), zos);
+            Files.copy(xmlFile.toPath(), zos);
 
-        zos.closeEntry();
-        zos.close();
+            zos.closeEntry();
+        }
 
         byte[] zipBytes = baos.toByteArray();
 
-        // ============ 2. BASE64 ============
+        // ============ 2. GUARDAR ZIP FÍSICO (opcional) ============
+        File zipFile = new File(xmlFile.getParent(), nombreZip + ".zip");
+        try (FileOutputStream fos = new FileOutputStream(zipFile)) {
+            fos.write(zipBytes);
+        }
+        System.out.println("✅ ZIP físico generado: " + zipFile.getAbsolutePath());
+
+        // ============ 3. BASE64 ============ 
         String base64 = Base64.getEncoder().encodeToString(zipBytes);
 
-        // ============ 3. GUARDAR TXT ============
+        // ============ 4. GUARDAR TXT ============ 
         try (FileWriter fw = new FileWriter(salidaTxt)) {
             fw.write(base64);
         }
 
-        System.out.println("✅ ZIP creado en memoria");
-        System.out.println("✅ Base64 generado");
-        System.out.println("✅ TXT generado: " + salidaTxt);
+        System.out.println("✅ Base64 generado y guardado en TXT: " + salidaTxt);
     }
 
     // TEST
     public static void main(String[] args) throws Exception {
         generarZipBase64Txt(
-                "C:\\Users\\USER\\Pictures\\smartbillco-smartbill_xml_faces_example-main\\DianClienteFacel\\fv09009177530002600000001.xml",
-                "fv09009177530002600000001",
-                "\\Users\\USER\\Pictures\\smartbillco-smartbill_xml_faces_example-main\\DianClienteFacel\\fv09009177530002600000001_BASE64.txt"
+                "C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\fv09009177530002600000019.xml",
+                "z09009177530002600000019",
+                "C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\factura_BASE64.txt"
         );
     }
 }
