@@ -14,6 +14,7 @@ import xades4j.properties.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import javax.xml.xpath.XPath;
 
 //UTILS
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,10 +24,15 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
-import java.util.Collection;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
+import javax.xml.namespace.NamespaceContext;
 
 //GUARDAR XML FIRMADO
 import javax.xml.transform.Transformer;
@@ -34,6 +40,8 @@ import javax.xml.transform.OutputKeys;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 import xades4j.algorithms.EnvelopedSignatureTransform;
 
 public class FirmadorXadesEpes {
@@ -58,7 +66,7 @@ public class FirmadorXadesEpes {
         final byte[] policyHash = Base64.getDecoder().decode("dMoMvtcG5aIzgYo0tIsSQeVJBDnUnfSOfBpxXrmor0Y=");
 
         //RUTA XML
-        final String xmlFile = "C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\fv09009177530002600000019.xml";
+        final String xmlFile = "C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\fv09009177530002600000023.xml";
 
         //Cargar XML
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -101,14 +109,71 @@ public class FirmadorXadesEpes {
             }
         };
 
+        // Crear XPath
+        XPathFactory xPathfactory = XPathFactory.newInstance();
+        XPath xpath = xPathfactory.newXPath();
+
+        // Definir namespaces
+        xpath.setNamespaceContext(new NamespaceContext() {
+            @Override
+            public String getNamespaceURI(String prefix) {
+                switch (prefix) {
+                    case "cbc":
+                        return "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2";
+                    case "inv":
+                        return "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2";
+                    case "cac":
+                        return "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2";
+                    case "ext":
+                        return "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2";
+                    default:
+                        return null;
+                }
+            }
+
+            @Override
+            public String getPrefix(String namespaceURI) {
+                return null;
+            }
+
+            @Override
+            public Iterator getPrefixes(String namespaceURI) {
+                return null;
+            }
+        });
+
+        // Obtener IssueDate y IssueTime usando XPath
+        String issueDate = (String) xpath.evaluate("/inv:Invoice/cbc:IssueDate", doc, XPathConstants.STRING);
+        String issueTime = (String) xpath.evaluate("/inv:Invoice/cbc:IssueTime", doc, XPathConstants.STRING);
+
+        System.out.println("IssueDate: " + issueDate);
+        System.out.println("IssueTime: " + issueTime);
+
+        // Combinar fecha y hora en un Calendar
+        String dateTimeStr = issueDate + "T" + issueTime; // Ej: 2026-03-04T14:44:31-05:00
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+        Calendar signingTime = Calendar.getInstance();
+        signingTime.setTime(sdf.parse(dateTimeStr));
+
+        System.out.println("Calendar signingTime: " + signingTime.getTime());
+
+        // 2️⃣ Parsear a OffsetDateTime
+        OffsetDateTime odt = OffsetDateTime.parse(issueDate + "T" + issueTime, DateTimeFormatter.BASIC_ISO_DATE.ISO_OFFSET_DATE_TIME);
+
+        // 3️⃣ Convertir a Calendar
+        Calendar firmaDate = GregorianCalendar.from(odt.toZonedDateTime());
+
+        //SETEAR LOS ROLES
         SignaturePropertiesProvider rolesProvider = new SignaturePropertiesProvider() {
             @Override
             public void provideProperties(SignaturePropertiesCollector spc) {
-                // Crear SignerRole con el rol que quieras
+                // Rol del firmante
                 SignerRoleProperty role = new SignerRoleProperty("third party");
-
-                // Asignarlo al collector
                 spc.setSignerRole(role);
+
+                // Forzar fecha/hora de firma
+                SigningTimeProperty stp = new SigningTimeProperty(firmaDate);
+                spc.setSigningTime(stp);
             }
         };
 
