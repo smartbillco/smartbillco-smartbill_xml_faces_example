@@ -66,7 +66,7 @@ public class FirmadorXadesEpes {
         final byte[] policyHash = Base64.getDecoder().decode("dMoMvtcG5aIzgYo0tIsSQeVJBDnUnfSOfBpxXrmor0Y=");
 
         //RUTA XML
-        final String xmlFile = "C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\fv09009177530002600000023.xml";
+        final String xmlFile = "C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\nc09009177530002600000036.xml";
 
         //Cargar XML
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -142,16 +142,18 @@ public class FirmadorXadesEpes {
             }
         });
 
-        // Obtener IssueDate y IssueTime usando XPath
-        String issueDate = (String) xpath.evaluate("/inv:Invoice/cbc:IssueDate", doc, XPathConstants.STRING);
-        String issueTime = (String) xpath.evaluate("/inv:Invoice/cbc:IssueTime", doc, XPathConstants.STRING);
+        // Obtener IssueDate y IssueTime usando XPath (GENÉRICO)
+        String issueDate = (String) xpath.evaluate("/*/cbc:IssueDate", doc, XPathConstants.STRING);
+        String issueTime = (String) xpath.evaluate("/*/cbc:IssueTime", doc, XPathConstants.STRING);
 
         System.out.println("IssueDate: " + issueDate);
         System.out.println("IssueTime: " + issueTime);
 
-        // Combinar fecha y hora en un Calendar
-        String dateTimeStr = issueDate + "T" + issueTime; // Ej: 2026-03-04T14:44:31-05:00
+        // Combinar fecha y hora
+        String dateTimeStr = issueDate + "T" + issueTime;
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+
         Calendar signingTime = Calendar.getInstance();
         signingTime.setTime(sdf.parse(dateTimeStr));
 
