@@ -6,8 +6,11 @@
             <file>file:/C:/Users/USER/Desktop/SMARTBILL/smartbillco-smartbill_xml_faces_example/DianClienteFacel/src/java/app/CustomAlgorithmsProvider.java</file>
             <file>file:/C:/Users/USER/Desktop/SMARTBILL/smartbillco-smartbill_xml_faces_example/DianClienteFacel/src/java/app/XmlZipBase64Util.java</file>
             <file>file:/C:/Users/USER/Desktop/SMARTBILL/smartbillco-smartbill_xml_faces_example/DianClienteFacel/src/java/app/RequestFacturaSimpleSigned.java</file>
+            <file>file:/C:/Users/USER/Desktop/SMARTBILL/smartbillco-smartbill_xml_faces_example/DianClienteFacel/src/java/app/GenerarPdfFactura.java</file>
             <file>file:/C:/Users/USER/Desktop/SMARTBILL/smartbillco-smartbill_xml_faces_example/DianClienteFacel/src/java/app/FirmadorXadesEpes.java</file>
             <file>file:/C:/Users/USER/Desktop/SMARTBILL/smartbillco-smartbill_xml_faces_example/DianClienteFacel/src/java/app/GenerarNotaCreditoDIAN.java</file>
+            <file>file:/C:/Users/USER/Desktop/SMARTBILL/smartbillco-smartbill_xml_faces_example/DianClienteFacel/src/java/app/GenerarNotaDebitoDIAN.java</file>
+            <file>file:/C:/Users/USER/Desktop/SMARTBILL/smartbillco-smartbill_xml_faces_example/DianClienteFacel/src/java/app/XmlPdfBase64Util.java</file>
         </group>
     </open-files>
 </project-private>

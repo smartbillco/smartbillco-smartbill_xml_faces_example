@@ -66,7 +66,7 @@ public class FirmadorXadesEpes {
         final byte[] policyHash = Base64.getDecoder().decode("dMoMvtcG5aIzgYo0tIsSQeVJBDnUnfSOfBpxXrmor0Y=");
 
         //RUTA XML
-        final String xmlFile = "C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\nc09009177530002600000036.xml";
+        final String xmlFile = "C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\nc09009177530002600000046.xml";
 
         //Cargar XML
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();

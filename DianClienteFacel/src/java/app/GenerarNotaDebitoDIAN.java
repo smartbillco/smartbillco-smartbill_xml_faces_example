@@ -4,7 +4,6 @@ package app;
  *
  * @author DANIEL SANTOS
  */
-import static app.RequestFacturaSimpleSigned.calcDvNit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import javax.xml.parsers.DocumentBuilder;
@@ -34,7 +33,7 @@ import org.apache.xml.security.utils.ElementProxy;
 
 public class GenerarNotaDebitoDIAN {
 
-    private static final String NS_DEBIT_NOTE = "urn:oasis:names:specification:ubl:schema:xsd:DebitNote-2";
+    private static final String NS_DEBIT_NOTE = "urn:oasis:names:specification:ubl:schema:xsd:DebittNote-2";
     private static final String NS_CAC = "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2";
     private static final String NS_CBC = "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2";
     private static final String NS_EXT = "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2";
@@ -107,12 +106,21 @@ public class GenerarNotaDebitoDIAN {
         String softwareSecurityCode = sha384Hex(SOFTWARE_ID + SOFTWARE_PIN + numFac);
 
         String cudeBase = buildCudeBase(
-                numFac, fecFac, horFac,
-                valFac, valImp1, valImp2, valImp3,
-                valTotFac, NIT_OFE_SIN_DV, numAdqSinDv,
-                CLAVE_TECNICA, TIPO_AMBIENTE
+                numFac,
+                fecFac,
+                horFac,
+                valFac,
+                valImp1,
+                valImp2,
+                valImp3,
+                valTotFac,
+                NIT_OFE_SIN_DV,
+                numAdqSinDv,
+                SOFTWARE_PIN,
+                TIPO_AMBIENTE
         );
-        System.out.println("cufe base = " + cudeBase);
+
+        System.out.println("cude base = " + cudeBase);
         String cude = sha384Hex(cudeBase);
 
         //CREAR DOC
@@ -197,7 +205,7 @@ public class GenerarNotaDebitoDIAN {
                 + "NitAdquiriente=" + numAdqSinDv + "\n"
                 + "FechaFactura=" + fecFac + "\n"
                 + "ValorTotalFactura=" + money2(valTotFac) + "\n"
-                + "CUFE=" + cude + "\n"
+                + "CUDE=" + cude + "\n"
                 + "URL=https://catalogo-vpfe-hab.dian.gov.co/Document/FindDocument?documentKey=" + cude));
 
         // (2) UBLExtension para ds:Signature (placeholder)
@@ -209,13 +217,13 @@ public class GenerarNotaDebitoDIAN {
         // ===== Encabezados UBL =====
         debitNote.appendChild(textEl(doc, NS_CBC, "cbc:UBLVersionID", "UBL 2.1"));
         debitNote.appendChild(textEl(doc, NS_CBC, "cbc:CustomizationID", "20"));
-        debitNote.appendChild(textEl(doc, NS_CBC, "cbc:ProfileID", "DIAN 2.1: Nota Debito de Factura Electrónica de Venta"));
+        debitNote.appendChild(textEl(doc, NS_CBC, "cbc:ProfileID", "DIAN 2.1: Nota Crédito de Factura Electrónica de Venta"));
         debitNote.appendChild(textEl(doc, NS_CBC, "cbc:ProfileExecutionID", TIPO_AMBIENTE));
         debitNote.appendChild(textEl(doc, NS_CBC, "cbc:ID", numFac));
 
         Element uuid = textEl(doc, NS_CBC, "cbc:UUID", cude);
         uuid.setAttribute("schemeID", "2");
-        uuid.setAttribute("schemeName", "CUFE-SHA384");
+        uuid.setAttribute("schemeName", "CUDE-SHA384");
         debitNote.appendChild(uuid);
 
         debitNote.appendChild(textEl(doc, NS_CBC, "cbc:IssueDate", fecFac));
@@ -231,15 +239,26 @@ public class GenerarNotaDebitoDIAN {
         debitNote.appendChild(textEl(doc, NS_CBC, "cbc:LineCountNumeric", "1"));
 
         Element discrepancy = doc.createElement("cac:DiscrepancyResponse");
-        agregarNodo(doc, discrepancy, "cbc:ReferenceID", "FAC001");
-        agregarNodo(doc, discrepancy, "cbc:ResponseCode", "01");
+        agregarNodo(doc, discrepancy, "cbc:ReferenceID", "SETP990000038");
+        agregarNodo(doc, discrepancy, "cbc:ResponseCode", "1");
         agregarNodo(doc, discrepancy, "cbc:Description", "Devolución parcial de los bienes y/o no aceptación parcial del servicio");
         debitNote.appendChild(discrepancy);
 
         Element billingRef = doc.createElement("cac:BillingReference");
         Element invoiceRef = doc.createElement("cac:InvoiceDocumentReference");
-        agregarNodo(doc, invoiceRef, "cbc:ID", "990000022");
-        agregarNodo(doc, invoiceRef, "cbc:UUID", "1ef48f2e7814eb727fe02f399977da99e5109f6e9abba18177f5242e67c4949b139318fc7d8e10f0dd8dbb83cfe86497");
+
+        // ID de la factura referenciada
+        agregarNodo(doc, invoiceRef, "cbc:ID", "SETP990000038");
+
+        // UUID con atributo schemeName
+        Element uuidfac = doc.createElement("cbc:UUID");
+        uuidfac.setAttribute("schemeName", "CUFE-SHA384");
+        uuidfac.setTextContent("1ef48f2e7814eb727fe02f399977da99e5109f6e9abba18177f5242e67c4949b139318fc7d8e10f0dd8dbb83cfe86497");
+        invoiceRef.appendChild(uuidfac);
+
+        // Fecha de la factura original
+        agregarNodo(doc, invoiceRef, "cbc:IssueDate", fecFac);
+
         billingRef.appendChild(invoiceRef);
         debitNote.appendChild(billingRef);
 
@@ -341,14 +360,14 @@ public class GenerarNotaDebitoDIAN {
         debitNote.appendChild(line);
 
         // 5) Guardar XML
-        String nombreArchivo = generarNombreArchivoDIAN("nd", NIT_OFE_SIN_DV, "000", now.getYear(), consecutiveFactura);
+        String nombreArchivo = generarNombreArchivoDIAN("nc", NIT_OFE_SIN_DV, "000", now.getYear(), consecutiveFactura);
         File out = new File(nombreArchivo);
         writeXml(doc, out);
 
         System.out.println("OK -> " + out.getAbsolutePath());
         System.out.println("CUDE: " + cude);
         System.out.println("SoftwareSecurityCode: " + softwareSecurityCode);
-        System.out.println("XML Nota Debito generado correctamente");
+        System.out.println("XML Nota Crédito generado correctamente");
     }
 
     // ==================== Parties (completos para DIAN mínimo) ====================
@@ -401,7 +420,7 @@ public class GenerarNotaDebitoDIAN {
         partyTaxScheme.appendChild(companyId);
 
         // TaxLevelCode (ejemplo típico O-99)
-        Element taxLevel = textEl(doc, NS_CBC, "cbc:TaxLevelCode", "O-99");
+        Element taxLevel = textEl(doc, NS_CBC, "cbc:TaxLevelCode", "R-99-PN");
         taxLevel.setAttribute("listName", "05");
         partyTaxScheme.appendChild(taxLevel);
 
@@ -575,11 +594,12 @@ public class GenerarNotaDebitoDIAN {
             String numFac, String fecFac, String horFac,
             String valFac, String valImp1, String valImp2, String valImp3,
             String valTotFac, String nitOfe, String numAdq,
-            String clTec, String tipoAmbiente
+            String softwarePin, String tipoAmbiente
     ) {
-        String codImp1 = "01"; // IVA
-        String codImp2 = "04"; // INC
-        String codImp3 = "03"; // ICA
+
+        String codImp1 = "01";//IVA
+        String codImp2 = "04";//INC
+        String codImp3 = "03";//ICA
 
         return numFac
                 + fecFac
@@ -591,7 +611,7 @@ public class GenerarNotaDebitoDIAN {
                 + money2(valTotFac)
                 + nitOfe
                 + numAdq
-                + clTec
+                + softwarePin
                 + tipoAmbiente;
     }
 

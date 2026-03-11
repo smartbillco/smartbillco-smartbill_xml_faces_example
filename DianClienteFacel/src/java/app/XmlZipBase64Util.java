@@ -60,8 +60,8 @@ public class XmlZipBase64Util {
     // TEST
     public static void main(String[] args) throws Exception {
         generarZipBase64Txt(
-                "C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\nc09009177530002600000036.xml",
-                "z09009177530002600000036",
+                "C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\nc09009177530002600000046.xml",
+                "z09009177530002600000046",
                 "C:\\Users\\USER\\Desktop\\SMARTBILL\\smartbillco-smartbill_xml_faces_example\\DianClienteFacel\\factura_BASE64.txt"
         );
     }
